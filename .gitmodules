@@ -1,0 +1,3 @@
+[submodule "commits/gitdm"]
+	path = commits/gitdm
+	url = git://git.lwn.net/gitdm.git
