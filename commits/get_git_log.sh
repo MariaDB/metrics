@@ -1,13 +1,25 @@
 #!/bin/sh
-git submodule update --init
-git clone https://github.com/mariadb/server --no-tags
-cd server
-git log --all --numstat -M --since-as-filter="2019-01-01" --until="2020-01-01" > git-2019.log
-git log --all --numstat -M --since-as-filter="2020-01-01" --until="2021-01-01" > git-2020.log
-git log --all --numstat -M --since-as-filter="2021-01-01" --until="2022-01-01" > git-2021.log
-git log --all --numstat -M --since-as-filter="2022-01-01" --until="2023-01-01" > git-2022.log
-cd ..
-gitdm/gitdm -c gitdm_config/gitdm.config -u -n < server/git-2019.log > out-2019.txt
-gitdm/gitdm -c gitdm_config/gitdm.config -u -n < server/git-2020.log > out-2020.txt
-gitdm/gitdm -c gitdm_config/gitdm.config -u -n < server/git-2021.log > out-2021.txt
-gitdm/gitdm -c gitdm_config/gitdm.config -u -n < server/git-2022.log > out-2022.txt
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <START_DATE> <END_DATE>"
+    echo "So for all of 2020 do:"
+    echo "$0 2020-01-01 2020-12-31"
+    exit 1
+fi
+# End date is exclusive so need to add one day to it
+END_DATE=$(date +%Y-%m-%d -d "$2+1 day")
+if [ -d "server" ]; then
+    echo "Updating server repo"
+    cd server
+    git pull --ff-only
+    cd ..
+else
+    echo "Cloning server repo"
+    git clone https://github.com/mariadb/server --no-tags
+fi
+echo "Extracting git log"
+git --git-dir server/.git log --all --numstat -M --since-as-filter="$1" --until="$END_DATE" > git.log
+echo "Processing git log"
+gitdm/gitdm -c gitdm_config/gitdm.config -u -U -n -H people-$1..$2.csv -E employers-$1..$2.csv < git.log > out-$1..$2.txt
+echo "Cleaning up"
+rm git.log
