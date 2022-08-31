@@ -1,0 +1,498 @@
+#!/usr/bin/python3
+#
+# Plow through the maintainers file and the repository to find
+# unmaintained subsystems.
+#
+# Copyright 2020 Jonathan Corbet <corbet@lwn.net>
+# distributable under the GNU General Public License v2
+#
+# Basic operation is as follows.  Start by creating a processed MAINTAINERS
+# database with something like:
+#
+#	./missingmaints analyze -\
+#		r /path/to/kernel/repo \
+#		-j 4 # Number of jobs to run simultaneously
+#		-g /path/to/aliases/file
+#		-o /processed/data # Where the output goes
+#
+# This will take a while.
+#
+# See a report with:
+#
+#	./missingmaints dump [subystem ...] -l /path/to/processed/data
+#
+# Throw in:
+#	-a to see subsystems with no listed maintainers
+#	-H to get output in HTML (useful for clicking on commits)
+#	--nf to include subsystems with no files
+#	-o to sort by oldest first
+#	--select=never to list subsystems w/no maint activity at all
+#       --select=nomaints to see subsystems with no listed maintainer
+#
+# Finally, look for subsystems with no maintainer activity but a lot of patches:
+#
+#	./missingmaints urgent -l /path/to/processed/data -r /path/to/repository
+#
+# Add:
+#	-c <commits>	# of commits since given ref
+#	--ref <release> # when to start counting commits
+#	-m <months>	# minimum months since maintainer seen
+#
+#
+import os, argparse, sys, re, subprocess, datetime, pickle
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+#
+# email aliases management
+#
+EmailAliases = { }
+
+def add_alias(addr1, addr2):
+    aliases = EmailAliases.get(addr1, [ addr1 ])
+    for alias in EmailAliases.get(addr2, [ addr2 ]):
+        if alias not in aliases:
+            aliases.append(alias)
+    for alias in aliases:
+        EmailAliases[alias] = aliases
+
+def get_aliases(email):
+    return EmailAliases.get(email, [ email ])
+
+#
+# Load a gitdm-style email aliases file
+#
+def load_gitdm_aliases(file):
+    with open(file, 'r') as f:
+        for line in f.readlines():
+            line = line.strip()
+            if not line or line[0] == '#':
+                continue
+            sline = line.split()
+            add_alias(sline[0], sline[1])
+
+#
+# Load a kernel mailmap file.
+#
+mmap_alias = re.compile(r'^[^<]+<([^>]+)>\s+<([^>]+)>$')
+
+def load_mailmap(file):
+    with open(file, 'r') as f:
+        for line in f.readlines():
+            m = mmap_alias.match(line)
+            if m:
+                add_alias(m.group(1), m.group(2))
+        
+              
+            
+
+#
+# Manage a list of subsystems.
+#
+def latest_act(d):
+    latest = None
+    for role in d:
+        if not d[role]:
+            continue
+        if (latest is None) or (d[role][1] > latest):
+            latest = d[role][1]
+    return latest
+
+class subsystem:
+    def __init__(self, name):
+        self.name = name
+        self.maints = [ ] # Don't really need this
+        self.mdata = { }
+        self.files = [ ]
+        self.status = 'unknown'
+        self.last_activity = None
+
+    def format_maint(self, maint):
+        minfo = self.mdata[maint]
+        if not minfo:
+            return '  %s: (idle)' % (maint)
+        ret = ['  ' + maint + ':']
+        if minfo['author']:
+            ret.append('    Author %s %s' % minfo['author'])
+        if minfo['committer']:
+            ret.append('    Committer %s %s' % minfo['committer'])
+        if minfo['tags']:
+            ret.append('    Tags %s %s' % minfo['tags'])
+        return '\n'.join(ret)
+
+    def __repr__(self):
+        ret = ['Subsystem %s' % (self.name)]
+        if not self.last_activity:
+            ret.append('  (No activity)')
+        else:
+            ret.append('  Last activity: ' + self.last_activity.strftime('%Y-%m-%d'))
+            for maint in self.maints:
+                ret.append(self.format_maint(maint))
+        return '\n'.join(ret)
+
+    def __str__(self):
+        return self.__repr__()
+
+    def add_maintainer(self, maint):
+        self.maints.append(maint)
+        self.mdata[maint] = None
+    def store_minfo(self, maint, info):
+        self.mdata[maint] = info
+        if info:
+            latest = latest_act(info)
+            if latest:
+                if (not self.last_activity) or latest > self.last_activity:
+                    self.last_activity = latest
+    def add_file(self, file):
+        self.files.append(file)
+    def set_status(self, status):
+        self.status = status
+
+#
+# Management of the MAINTAINERS file.
+#
+Subsystems = { }
+
+def load_maintainers():
+    with open('MAINTAINERS', 'r') as mf:
+        #
+        # We "know" that 3c59x is the first entry in the file.  That could
+        # change, but it's been that way for a long time :)
+        #
+        line = mf.readline().strip()
+        while (line is not None) and not line.startswith('3C59X'):
+            line = mf.readline().strip()
+        if not line:
+            die("Bummer, couldn't find the first MAINTAINERS section")
+        #
+        # OK, soak everything up.
+        #
+        while line:
+            ss = load_subsystem(mf, line)
+            if ss.name == 'THE REST':
+                return # victory!
+            Subsystems[ss.name] = ss
+            line = mf.readline().strip()
+            while (line is not None) and (len(line) == 0):
+                line = mf.readline().strip()
+        print('Loaded %d subsystems' % len(Subsystems))
+
+emailpat = re.compile(r'"?([^<]+)"? +<([^>]+)>')
+def load_subsystem(mf, name):
+    ss = subsystem(name)
+    line = mf.readline().strip()
+    while line:
+        if line[1] != ':':
+            pass # print('Funky line %s in %s' % (line, name))
+        else:
+            field = line[0]
+            value = line[2:].strip()
+            if field == 'M':
+                # Filter out mailing-list entries
+                m = emailpat.search(value)
+                if m:
+                    ss.add_maintainer(value)
+            elif field == 'F':
+                ss.add_file(value)
+            elif field == 'S':
+                ss.set_status(value)
+        line = mf.readline().strip()
+    return ss
+                                  
+#
+# Get info about a subsystem.
+#
+def get_subsys_info(subsys):
+    for m in subsys.maints:
+        subsys.store_minfo(m, lookup_maintainer(subsys, m, subsys.files))
+    print('Done:', subsys.name)
+    return subsys
+
+def get_all_subsys_info(jobs):
+    names = list(Subsystems.keys())
+    with ThreadPoolExecutor(max_workers = jobs) as tpe:
+        futures = [tpe.submit(get_subsys_info, Subsystems[name]) for name in names]
+        for future in futures:
+            ss = future.result()
+            print(ss)
+
+#
+# Look up what a maintainer has been doing.
+#
+def lookup_maintainer(subsys, maint, files):
+    m = emailpat.search(maint)
+    if not m:
+#        print('Funky maintainer line:', subsys.name, maint)
+        return None
+    if not files:
+#        print('Subsys %s has no files' % subsys.name)
+        return None
+    email = m.group(2)
+    return {
+        'author': git_search(files, alias_args('--author=%s', email)),
+        'committer': git_search(files, alias_args('--committer=%s', email), cdate = True),
+        'tags': git_search(files, alias_args('--grep=by:.*%s', email)),
+        }
+
+def alias_args(arg, email):
+    return [ arg % (alias) for alias in get_aliases(email) ]
+    
+
+def decode_date(date):
+    return datetime.datetime.strptime(date, '%Y-%m-%d')
+
+def git_search(files, tests, cdate = False):
+    command = ['git', 'log', '-1', '--pretty=format:%h %as %cs'] + tests + ['--'] + files
+    with subprocess.Popen(command, stdout = subprocess.PIPE) as p:
+        results = p.stdout.readline().decode('utf8')
+        p.wait()
+    if not results:
+        return None
+    commit, adate, cdate = results.strip().split()
+    if cdate:
+        return (commit, decode_date(cdate))
+    else:
+        return (commit, decode_date(adate))
+    
+
+def die(string):
+    sys.stderr.write(string + '\n')
+    sys.exit(1)
+#
+# Argparsery
+#
+def setupargs():
+    p = argparse.ArgumentParser()
+    subs = p.add_subparsers()
+    #
+    # analyze
+    #
+    sp = subs.add_parser('analyze')
+    sp.add_argument('-g', '--gitdm-aliases', help = 'Load gitdm-style email aliases file',
+                    default = None)
+    sp.add_argument('-j', '--jobs', help = 'Number of threads to run', type = int,
+                    default = 4)
+    sp.add_argument('-o', '--output', help = 'Name of output database file',
+                    default = 'maintainers.pickle')
+    sp.add_argument('-r', '--repository', help = 'Repository location',
+                    default = '.')
+    sp.add_argument('-s', '--subsystem', help = 'Look at this subsystem only',
+                    default = None)
+    sp.set_defaults(handler = cmd_analyze)
+    #
+    # dump
+    #
+    sp = subs.add_parser('dump')
+    sp.add_argument('subsys', nargs = '*')
+    sp.add_argument('-a', '--all', help = 'Dump maintainerless entries too',
+                    action = 'store_true', default = False)
+    sp.add_argument('-H', '--html', help = 'Dump in HTML', action = 'store_true',
+                    default = False)
+    sp.add_argument('-l', '--load', help = 'Load data from pickle file',
+                   default = 'maintainers.pickle')
+    sp.add_argument('--nf', help = 'Include subsystems with no files',
+                    action = 'store_true', default = False)
+    sp.add_argument('-o', '--oldest', help = 'Sort oldest first', action = 'store_true',
+                    default = False)
+    sp.add_argument('-s', '--select', help = 'Filter for subsys to display',
+                    choices = ['never', 'nomaints'], default = None)
+    sp.set_defaults(handler = cmd_dump)
+    #
+    # urgent - find unmaintained subsystems with activity
+    #
+    sp = subs.add_parser('urgent')
+    sp.add_argument('-c', '--commits', help = 'How many commits since ref',
+                    default = 42, type = int)
+    sp.add_argument('-H', '--html', help = 'Dump in HTML', action = 'store_true',
+                    default = False)
+    sp.add_argument('-l', '--load', help = 'Load data from pickle file',
+                   default = 'maintainers.pickle')
+    sp.add_argument('-m', '--months', type = int,
+                    help = 'months of maint inactivity', default = 12)
+    sp.add_argument('--ref', help = 'Git ref to start patch count',
+                    required = True)
+    sp.add_argument('-r', '--repository', help = 'Repository location',
+                    default = '.')
+    sp.set_defaults(handler = cmd_urgent)
+    return p.parse_args()
+
+
+#
+# Analyze the maintainers file.
+#
+def cmd_analyze(args):
+    try:
+        with open(args.output, 'wb') as f:
+            do_analyze(args)
+            f.write(pickle.dumps(Subsystems))
+    except IOError:
+        die(f'Unable to open output file {args.output}')
+
+def do_analyze(args):
+    os.chdir(args.repository)
+    #
+    # Snag email alias information.
+    #
+    if args.gitdm_aliases:
+        load_gitdm_aliases(args.gitdm_aliases)
+    load_mailmap('.mailmap')
+    #
+    # Get the maintainers file, then crank.
+    #
+    load_maintainers()
+    print('Cranking all (%d subsystems, %d jobs)...go out for dinner...' %
+          (len(Subsystems), args.jobs))
+    get_all_subsys_info(args.jobs)
+
+def date_key(s):
+    return Subsystems[s].last_activity or datetime.datetime(1990, 1, 1)
+#
+# Dump out some info.
+#
+dump_html_header = '''
+<table>
+<tr><th>Subsystem</th>
+    <th>Activity</th>
+    <th>Maintainer</th>
+    <th>Author</th>
+    <th>Commit</th>
+    <th>Tag</th></tr>
+'''
+
+dump_html_footer = '</table>'
+
+def dump_pdate(date):
+    if date:
+        return date.strftime("%Y-%m-%d")
+    return '——'
+
+def git_url(commit):
+    return 'https://git.kernel.org/linus/' + commit
+
+nameonly = re.compile(r'"?([^<"]+)"?\s+(<.*>)?')
+def fixup_maint_name(name):
+    m = nameonly.match(name)
+    if m:
+        return m.group(1)
+    return name
+
+RClass = "Odd" # XXX
+def rowclass():
+    global RClass
+    if RClass == 'Odd':
+        RClass = 'Even'
+    else:
+        RClass = 'Odd'
+    return f'"{RClass}"'
+
+def dump_subsys_html(ss):
+    span = max(1, len(ss.maints))
+    rc = rowclass()
+    print(f'''<tr class={rc}>
+    	<td valign="top" rowspan={span}>{ss.name}</td>
+        <td valign="top" rowspan={span}>{dump_pdate(ss.last_activity)}</td>''')
+    if not ss.maints:
+        print('<td>(no maintainers)</td><td colspan=3></td></tr>')
+        return
+    rowstart = ''
+    for m in ss.maints:
+        mi = ss.mdata[m]
+        if not mi:
+            mi = { 'author': None, 'committer': None, 'tags': None}
+        print(f'\t{rowstart}<td valign="top">{fixup_maint_name(m)}</td>')
+        for type in ['author', 'committer', 'tags']:
+            if mi[type]:
+                commit, date = mi[type]
+                print(f'\t  <td valign="top"><a href="{git_url(commit)}">{dump_pdate(date)}</a></td>')
+            else:
+                print('\t  <td valign="top">——</td>')
+        print('</tr>')
+        rowstart = f'<tr class={rc}>'
+
+def load_pickle(pfile):
+    global Subsystems
+
+    try:
+        with open(pfile, 'rb') as f:
+            Subsystems = pickle.loads(f.read())
+    except IOError:
+        die(f'Unable to open pickle file {pfile}')
+
+def cmd_dump(args):
+    load_pickle(args.load)
+    subs = args.subsys or Subsystems.keys()
+    if not args.nf:
+        subs = [sub for sub in subs if Subsystems[sub].files]
+    if args.select == 'never':
+        subs = [sub for sub in subs if Subsystems[sub].last_activity is None]
+    elif args.select == 'nomaints':
+        subs = [sub for sub in subs if not Subsystems[sub].maints]
+    if args.oldest:
+        subs = sorted(subs, key = date_key)
+    if args.html:
+        print(dump_html_header)
+    for sub in subs:
+        try:
+            s = Subsystems[sub]
+        except KeyError:
+            die("No such subsystem: %s" % (sub))
+        if not (args.all or s.maints):
+            continue
+        if args.html:
+            dump_subsys_html(s)
+        else:
+            print(s)
+    if args.html:
+        print(dump_html_footer)
+
+#
+# urgent - find unmaintained subsystems with activity
+#
+def unmaintained_for(subsys, delta):
+    if subsys.last_activity is None:
+        return True
+    return (datetime.datetime.now() - subsys.last_activity) >= delta
+
+def get_commit_count(subsys, ref):
+    cmd = ['git', 'log', '--oneline', f'{ref}..', '--'] + subsys.files
+    with subprocess.Popen(cmd, stdout = subprocess.PIPE) as p:
+        count = 0
+        for line in p.stdout.readlines():
+            count += 1
+        p.wait()
+    return count
+
+def cmd_urgent(args):
+    os.chdir(args.repository)
+    load_pickle(args.load)
+    #
+    # Get the list of unmaintained subsystems.
+    #
+    delta = datetime.timedelta(days = args.months*30)
+    subs = [sub for sub in Subsystems.keys()
+            if (Subsystems[sub].files and
+                unmaintained_for(Subsystems[sub], delta))]
+    #
+    # Now, for each one, see how many patches exist during the ref period.
+    #
+    if args.html:
+        print('<table class="OddEven">')
+        print('<tr><th>Subsystem</th><th>Activity</th><th>Commits</th></tr>')
+    for sub in subs:
+        ss = Subsystems[sub]
+        commits = get_commit_count(ss, args.ref)
+        if commits >= args.commits:
+            if ss.last_activity:
+                activity = ss.last_activity.strftime('%Y-%m-%d')
+            else:
+                activity = '——'
+            if args.html:
+                print(f'<tr><td>{ss.name}</td><td>{activity}</td><td>{commits}</td></tr>')
+            else:
+                print(f'{ss.name}: {activity} {commits}')
+    if args.html:
+        print('</table>')
+#
+# Main program
+#
+args = setupargs()
+args.handler(args)

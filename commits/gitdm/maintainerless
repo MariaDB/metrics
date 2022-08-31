@@ -1,0 +1,28 @@
+#!/usr/bin/python
+#
+# Try to figure out which files in the kernel tree lack maintainers.
+#
+import glob, os
+
+listed = set()
+
+maint = open('MAINTAINERS', 'r')
+for line in maint.readlines():
+    if line.startswith('F:'):
+        pat = line[3:].strip()
+        if pat == '*':
+            break
+        for start in glob.iglob(pat, recursive = True):
+            for path, dirs, files in os.walk(start):
+                for dir in dirs:
+                    listed.add(os.path.join(path, dir))
+                for file in files:
+                    listed.add(os.path.join(path, file))
+            else:
+                listed.add(start)
+print('%d files' % len(listed))    
+for path, dirs, files in os.walk('.'):
+    for file in files:
+        full = os.path.join(path[2:], file) # zorch "./"
+        if full not in listed:
+            print(full)

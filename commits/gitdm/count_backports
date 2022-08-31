@@ -1,0 +1,51 @@
+#!/usr/bin/python
+#
+# A hack to count how many commits in a given mainline release were
+# backported to a previous series of stable commits.
+#
+# git log stable..stable | count_backports v5.17
+#
+import pickle, re
+import gitlog
+
+def vmatch(v1, v2):
+    return v2.startswith(v1)
+
+p_upstream = re.compile(r'commit ([0-9a-f]+) upstream', re.I)
+p_upstream2 = re.compile(r'upstream commit ([0-9a-f]+)', re.I)
+
+def upstream(patch):
+    m = p_upstream.search(patch.changelog) or \
+        p_upstream2.search(patch.changelog)
+    if m:
+        return m.group(1)
+    return None
+
+db = pickle.load(open('committags.db', 'rb'))
+#
+# Add 12-char versions of all commit IDs since that's what appears
+# in some stable commits. Copy it to a new dict since otherwise the
+# keys iterator complains.
+#
+VDB = { }
+for commit in db.keys():
+    VDB[commit[:12]] = VDB[commit] = db[commit]
+
+versions = { }
+seen = 0
+input = open(0, 'rb')
+patch = gitlog.grabpatch(input)
+while patch:
+    seen += 1
+    up = upstream(patch)
+    if up:
+        if up in VDB:
+            try:
+                versions[VDB[up]] += 1
+            except KeyError:
+                versions[VDB[up]] = 1
+    patch = gitlog.grabpatch(input)
+
+print(f'{seen} patches seen.')
+for v in sorted(versions):
+    print(f'  {v}: {versions[v]} ({100*versions[v]/seen:.2f}%)')

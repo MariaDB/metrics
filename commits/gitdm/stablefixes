@@ -1,0 +1,185 @@
+#!/usr/bin/python3
+# -*- python -*-
+#
+# Read through a set of patches and see how many of them are fixes
+# for prior patches.
+#
+#   git log --decorate master..stable | stablefixes
+#
+# As with most gitdm stuff, this has been developed to the point where it
+# solved the immediate task and no further.  I hope it's useful, but can
+# promise nothing.
+#
+# Copyright 2016 Eklektix, Inc.
+# Copyright 2016 Jonathan Corbet <corbet@lwn.net>
+#
+# Redistributable under GPLv2
+#
+import gitlog
+import sys, re, subprocess
+
+Ids = set()
+Fixes = [ ]
+FixMap = { }
+Reverts = [ ]
+UpstreamMissing = [ ]
+UpstreamMap = { }
+Npatches = 0
+
+#
+# Track version tags as we go.
+#
+def canonID(id):
+    return id[:10]
+
+PatchVersions = {}
+
+def AddVersion(commit, version):
+    PatchVersions[canonID(commit)] = version
+def GetVersion(commit):
+    try:
+        return PatchVersions[canonID(commit)]
+    except KeyError:
+        return 'unknown'
+
+#
+# Patterns to snarf the info we're after.
+# The {6,} in p_fixes is entirely to defend us against 8b9c6b28312cc,
+# which reads "Fixes: 2.3.43".
+#
+p_fixes = re.compile(r'^\s+Fixes:\s+(commit\s+)?([0-9a-f]{6,}).*$')
+p_revert = re.compile(r'This reverts commit ([0-9a-f]+)( +which is)?')
+p_upstream = re.compile(r'commit ([0-9a-f]+) upstream', re.I)
+p_upstream2 = re.compile(r'upstream commit ([0-9a-f]+)', re.I)
+#
+# Snarf the references to other patches.
+#
+def SaveFix(fixer, fixee):
+    if fixer not in Fixes:
+        Fixes.append(fixer)
+    try:
+        if fixee not in FixMap[fixer]:
+            FixMap[fixer].append(fixee)
+    except KeyError:
+        FixMap[fixer] = [ fixee ]
+
+def FindRefs(commit, patch):
+    #
+    # Look for a straightforward Fixes: line.
+    #
+    for line in patch.taglines:
+        m = p_fixes.match(line)
+        if m:
+            SaveFix(commit, canonID(m.group(2)))
+    #
+    # Or perhaps this commit is a revert?
+    #
+    whichis = False
+    m = p_revert.search(patch.changelog)
+    if m:
+        SaveFix(commit, canonID(m.group(1)))
+        Reverts.append(commit)
+        whichis = m.group(2)
+    #
+    # In any case keep track of upstream patch corresponding to this one.  But be
+    # careful about "this reverts ... which is ... upstream"
+    #
+    if not whichis:
+        m = p_upstream.search(patch.changelog) or p_upstream2.search(patch.changelog)
+        if m:
+            Ids.add(canonID(m.group(1)))
+            UpstreamMap[canonID(m.group(1))] = commit
+        else:
+            UpstreamMissing.append(commit)
+#
+# What's the URL of a patch in the stable tree?
+#
+SBase = 'https://git.kernel.org/cgit/linux/kernel/git/stable/' + \
+        'linux-stable.git/commit?id='
+def StableURL(id):
+    return SBase + id
+
+def trim(commit):
+    return commit[:16]
+
+#
+# Go through the patch stream.
+#
+release = 'unknown'
+input = open(0, 'rb')
+patch = gitlog.grabpatch(input)
+while patch:
+    if patch.tag:
+        release = patch.tag
+    Npatches += 1
+    commit = canonID(patch.commit)
+    Ids.add(commit)
+    AddVersion(commit, release)
+    FindRefs(commit, patch)
+    patch = gitlog.grabpatch(input)
+
+TableHdr = '''<tr><th rowspan=2>Type</th>
+		  <th colspan=2>Introduced</th>
+                  <th colspan=2>Fixed</th></tr>
+              <tr><th>Release</th><th>Commit</th><th>Release</th><th>Commit</th></tr>
+'''
+
+#
+# Now see how many fixes have been seen before.
+#
+out = open('stable-fixes.html', 'w')
+out.write('<!-- Found %d patches, %d fixes, %d reverts -->\n' % (Npatches, len(Fixes), len(Reverts)))
+out.write('<!-- %d had no upstream reference -->\n' % (len(UpstreamMissing)))
+out.write('<table class="OddEven">\n')
+out.write(TableHdr)
+fixed_in_same = nfound = 0
+#
+# Go through all of the commit IDs we've seen (both stable and upstream)
+# in reverse-time order.
+#
+def StablePatch(commit):
+    if commit in Ids:
+        try:
+            return UpstreamMap[commit]
+        except KeyError:
+            return commit
+    return None
+
+Fixes.reverse()
+buggy = set()
+buggy_different = set()
+for i in range(0, len(Fixes)):
+    if (i % 50) == 0:
+        print('Checking %d/%d, found %d   ' % (i, len(Fixes), nfound), end = '\r')
+        sys.stdout.flush()
+    fix = Fixes[i]
+    #
+    # We know we have a fix, but does it fix something that showed up in stable?
+    #
+    for fixed in FixMap[fix]:
+        fixed = StablePatch(fixed)
+        if fixed is None:
+            continue
+        buggy.add(fixed)
+        v_id = GetVersion(fixed)
+        v_fixer = GetVersion(fix)
+        type = 'Fix'
+        if fix in Reverts:
+            type = 'Revert'
+        out.write('<tr><td>%s</td><td>%s</td>\n'
+                  '<td><a href="%s"><tt>%s</tt></a></td>\n'
+                  '<td>%s</td>\n'
+                  '<td><a href="%s"><tt>%s</tt></a></td></tr>\n'
+                  % (type, v_id, StableURL(fixed), trim(fixed),
+                     v_fixer, StableURL(fix), trim(fix)))
+        if v_id == v_fixer:
+            fixed_in_same += 1
+        else:
+            buggy_different.add(fixed)
+        nfound += 1
+out.write('</table>')
+out.write('<!-- Found %d/%d/%d refixes, %d in same release -->\n' % (nfound, len(buggy),
+                                                                     len(buggy_different),
+                                                                     fixed_in_same))
+out.close()
+print()
