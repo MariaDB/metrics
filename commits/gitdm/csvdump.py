@@ -111,4 +111,19 @@ def OutputHackersCSV (file, hlist):
 __all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'store_patch' ]
 
 
+def OutputEmployersCSV (file, elist):
+    if file is None:
+        return
+    file.write ("Name,Commits,Changed Lines,Lines Removed\n")
+    for employer in elist:
+        if employer.count > 0:
+            file.write ("\"%s\",%d,%d,%d\n" %
+                        (employer.name,
+                         employer.count,
+                         employer.changed,
+                         employer.removed))
+
+__all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'OutputEmployersCSV', 'store_patch' ]
+
+
 

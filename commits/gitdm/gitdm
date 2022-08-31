@@ -38,6 +38,7 @@ FileFilter = None
 CSVFile = None
 CSVPrefix = None
 HackersCSV = None
+EmployersCSV = None
 AkpmOverLt = 0
 DumpDB = 0
 CFName = 'gitdm.config'
@@ -79,9 +80,9 @@ def ParseOpts():
     global DateStats, AuthorSOBs, FileFilter, AkpmOverLt, DumpDB
     global CFName, CSVFile, CSVPrefix,DirName, Aggregate, Numstat
     global ReportByFileType, ReportUnknowns, CompanyFilter, FileReport
-    global HackersCSV
+    global HackersCSV, EmployersCSV
 
-    opts, rest = getopt.getopt(sys.argv[1:], 'ab:dC:c:Df:H:h:l:no:p:r:R:stUuwx:yz')
+    opts, rest = getopt.getopt(sys.argv[1:], 'ab:dC:c:Df:E:H:h:l:no:p:r:R:stUuwx:yz')
     for opt in opts:
         if opt[0] == '-a':
             AkpmOverLt = 1
@@ -97,10 +98,12 @@ def ParseOpts():
             DateStats = 1
         elif opt[0] == '-f':
             FileReport = opt[1]
+        elif opt[0] == '-E':
+            EmployersCSV = open(opt[1], 'w')
         elif opt[0] == '-h':
             reports.SetHTMLOutput(open(opt[1], 'w'))
         elif opt[0] == '-H':
-            HackersCSV = open (opt[1], 'w')
+            HackersCSV = open(opt[1], 'w')
         elif opt[0] == '-l':
             reports.SetMaxList(int(opt[1]))
         elif opt[0] == '-n':
@@ -575,6 +578,10 @@ if DateStats:
 if HackersCSV:
     csvdump.OutputHackersCSV (HackersCSV, hlist);
     HackersCSV.close ()
+
+if EmployersCSV:
+    csvdump.OutputEmployersCSV(EmployersCSV, elist);
+    EmployersCSV.close()
 
 if CSVPrefix:
     csvdump.save_csv(CSVPrefix)
