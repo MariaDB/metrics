@@ -7,5 +7,4 @@
 
 # PRs
 
-* Allow script to accept custom date range inputs (week/month/year and start/stop).
 * Create generic custom plot function.
