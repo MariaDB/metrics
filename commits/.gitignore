@@ -1,3 +1,4 @@
 server/
 out*.txt
 *.csv
+*.png
