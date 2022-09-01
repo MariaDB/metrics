@@ -92,21 +92,15 @@ def OutputCSV (file):
 def OutputHackersCSV (file, hlist):
     if file is None:
         return
-    file.write ("Name,Last affiliation,Activity Start,Activity End,Commits,Changed Lines,Lines Removed,Signoffs,Reviews,Test Credits,Test Credits Given,Report Credits,Report Credits Given\n")
+    file.write ("Name,Last affiliation,Activity Start,Activity End,Commits,Lines Added,Lines Removed\n")
     for hacker in hlist:
         if len(hacker.patches) > 0:
-            file.write ("\"%s\",%s,%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d\n" %
+            file.write ("\"%s\",%s,%s,%s,%d,%d,%d\n" %
                         (hacker.name,
                          hacker.emailemployer (None, hacker.activity_end).name,
                          hacker.activity_start, hacker.activity_end,
                          len(hacker.patches),
-                         hacker.changed, hacker.removed,
-                         len(hacker.signoffs),
-                         len(hacker.reviews),
-                         len(hacker.tested),
-                         hacker.testcred,
-                         len(hacker.reports),
-                         hacker.repcred))
+                         hacker.added, hacker.removed))
 
 __all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'store_patch' ]
 
@@ -114,13 +108,13 @@ __all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'store_patch' ]
 def OutputEmployersCSV (file, elist):
     if file is None:
         return
-    file.write ("Name,Commits,Changed Lines,Lines Removed\n")
+    file.write ("Name,Commits,Lines Added,Lines Removed\n")
     for employer in elist:
         if employer.count > 0:
             file.write ("\"%s\",%d,%d,%d\n" %
                         (employer.name,
                          employer.count,
-                         employer.changed,
+                         employer.added,
                          employer.removed))
 
 __all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'OutputEmployersCSV', 'store_patch' ]
