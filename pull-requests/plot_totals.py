@@ -27,13 +27,13 @@ def generate(csv_file):
     ax1.set_xlabel('Week Ending')
     ax1.set_ylabel('Open PR Count')
     ax1.plot(date, pull_requests_open, color=color)
-    ax1.tick_params(axis='y', labelcolor=color)
+    #ax1.tick_params(axis='y', labelcolor=color)
 
-    ax2 = ax1.twinx()
-    color = 'tab:blue'
-    ax2.set_ylabel('Closed PR Count')
-    ax2.plot(date, pull_requests_closed, color=color)
-    ax2.tick_params(axis='y', labelcolor=color)
+    #ax2 = ax1.twinx()
+    #color = 'tab:blue'
+    #ax2.set_ylabel('Closed PR Count')
+    #ax2.plot(date, pull_requests_closed, color=color)
+    #ax2.tick_params(axis='y', labelcolor=color)
 
 
     plt.setp(ax1.get_xticklabels(), rotation=30, ha="right")
