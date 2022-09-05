@@ -23,6 +23,6 @@ echo "Generating category config"
 ./parse_categories.py
 echo "Processing git log"
 gitdm/gitdm -c gitdm_config/gitdm.config -u -U -n -H people-$1..$2.csv -E employers-$1..$2.csv < git.log > out-$1..$2.txt
-gitdm/gitdm -c gitdm_config_categories/gitdm.config -u -U -n -E catgegories-$1..$2.csv < git.log > categories_out-$1..$2.txt
+gitdm/gitdm -c gitdm_config_categories/gitdm.config -u -U -n -E categories-$1..$2.csv < git.log > categories_out-$1..$2.txt
 echo "Cleaning up"
 rm git.log
