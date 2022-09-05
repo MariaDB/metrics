@@ -1,0 +1,63 @@
+# This file is not yet used by gitdm, it categorises organisations into
+# groupings
+
+# Organisation              Category
+Independent               Other
+GSoC                      GSoC
+Codership                 Provider
+"MariaDB Corporation"     "MariaDB Corporation"
+Gentoo                    Distro
+"MariaDB Foundation"      "MariaDB Foundation"
+Amazon                    Provider
+FreeBSD                   Distro
+OpenBSD                   Distro
+Tencent                   Sponsor
+Vettabase                 Provider
+"Oracle Corporation"      Provider
+"JD.com (Jingdong)"       Provider
+RedHat                    Sponsor
+Huawei                    Provider
+"Scutech Corporation"     Provider
+Nichi-in                  Provider
+FromDual                  Provider
+CONNECT                   Provider
+ServiceNow                Sponsor
+Arm                       Provider
+"Alpine Linux"            Distro
+Appian                    Provider
+"Artix Linux"             Distro
+Atos                      Distro
+ClearCode                 Provider
+FRUCT                     Provider
+IBM                       Sponsor
+"Kali Linux"              Distro
+Kitware                   Provider
+M2Mobi                    Provider
+"Monty Program"           "MariaDB Corporation"
+MySQL                     Provider
+"Sun Microsystems"        Provider
+OmniOS                    Distro
+Percona                   Sponsor
+ScaleFlux                 Provider
+SkySQL                    "MariaDB Corporation"
+"SUSE Linux"              Distro
+Tempesta                  "MariaDB Corporation"
+TileDB                    Provider
+Tokutek                   Sponsor
+Percona                   Sponsor
+"Wind River"              Provider
+"Gruppo Mondadori (Mondadori Group)"    Provider
+"Trail of Bits"           Other
+"HiQ Finland"             Provider
+Zulip                     Other
+"Worldline Global"        Provider
+Kontron                   Provider
+Aerospike                 Provider
+VilniusDB                 Provider
+Baidu                     Provider
+"Arch Linux"              Distro
+GoSecure                  Provider
+NetBSD                    Distro
+Teramind                  Provider
+HardenedBSD               Distro
+
