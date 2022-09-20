@@ -3,6 +3,6 @@ out*.txt
 categories_out*.txt
 *.csv
 *.png
-gitdm_config_categories/domain-map
-gitdm_config_categories/employers
-
+config/mariadb_server_categories/domain-map
+config/mariadb_server_categories/employers
+git_trees/

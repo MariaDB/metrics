@@ -45,6 +45,6 @@ def ParseFile(name_in, name_out):
     file_write.close()
 
 if __name__ == '__main__':
-    categories = ReadCategories("gitdm_config/categories")
-    ParseFile("gitdm_config/domain-map", "gitdm_config_categories/domain-map")
-    ParseFile("gitdm_config/employers", "gitdm_config_categories/employers")
+    categories = ReadCategories("config/mariadb_server/categories")
+    ParseFile("config/mariadb_server/domain-map", "config/mariadb_server_categories/domain-map")
+    ParseFile("config/mariadb_server/employers", "config/mariadb_server_categories/employers")
