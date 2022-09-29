@@ -108,11 +108,12 @@ __all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'store_patch' ]
 def OutputEmployersCSV (file, elist):
     if file is None:
         return
-    file.write ("Name,Commits,Lines Added,Lines Removed\n")
+    file.write ("Name,Hackers,Commits,Lines Added,Lines Removed\n")
     for employer in elist:
         if employer.count > 0:
-            file.write ("\"%s\",%d,%d,%d\n" %
+            file.write ("\"%s\",%d,%d,%d,%d\n" %
                         (employer.name,
+                         len(employer.hackers),
                          employer.count,
                          employer.added,
                          employer.removed))
