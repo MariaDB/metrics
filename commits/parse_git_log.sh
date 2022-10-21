@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$#" -ne 3 ]; then
     echo "Usage: $0 <GITHUB_PATH> <START_DATE> <END_DATE>"
@@ -12,16 +12,26 @@ TREE=$(basename $1)
 # End date is exclusive so need to add one day to it
 END_DATE=$(date +%Y-%m-%d -d "$3+1 day")
 if [ -d "$TREE" ]; then
-    echo "Updating server repo"
+    echo "Updating repo $1"
     cd $TREE
-    git pull --ff-only
+    git fetch
     cd ..
 else
-    echo "Cloning server repo"
+    echo "Cloning repo $1"
     git clone https://github.com/$1 --no-tags
 fi
 echo "Extracting git log"
-git --git-dir $TREE/.git log --all --numstat -M --since-as-filter="$2" --until="$END_DATE" > git.log
+if [ $TREE = "server" ]; then
+    BRANCHES="--remotes=\"origin/10.[0-9]\" --remotes=\"origin/10.1[0-9]\""
+elif [ $TREE = "mariadb-columnstore-engine" ]; then
+    BRANCHES="--remotes=\"origin/develo?\" --remotes=\"origin/develop-1.[0-9]\" --remotes=\"origin/develop-[5-9]\""
+elif [ $TREE = "libmarias3" ]; then
+    BRANCHES="origin/master"
+else
+    BRANCHES="--all"
+fi
+COMMAND="git --git-dir $TREE/.git log ${BRANCHES} --numstat -M --since-as-filter=\"$2\" --until=\"$END_DATE\" > git.log"
+eval "$COMMAND"
 cd ..
 echo "Generating category config"
 ./parse_categories.py
