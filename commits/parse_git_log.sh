@@ -30,7 +30,7 @@ elif [ $TREE = "libmarias3" ]; then
 else
     BRANCHES="--all"
 fi
-COMMAND="git --git-dir $TREE/.git log ${BRANCHES} --numstat -M --since-as-filter=\"$2\" --until=\"$END_DATE\" > git.log"
+COMMAND="git --git-dir $TREE/.git log ${BRANCHES} --cherry-pick --numstat -M --since-as-filter=\"$2\" --until=\"$END_DATE\" > git.log"
 eval "$COMMAND"
 cd ..
 echo "Generating category config"
