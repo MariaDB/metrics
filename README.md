@@ -12,4 +12,4 @@ This directory contains a shell script to cache a git log and pipe it into a too
 
 ## We need your help!
 
-If you are a contributor to MariaDB it would help us immensely if you could look at the files in [`commits/gitdm_config`](commits/gitdm_config) to check that any details about your affiliation are correct. Details on these files can be found in the commits directory [README.md](commits/README.md).
+If you are a contributor to MariaDB it would help us immensely if you could look at the files in [`commits/config/mariadb_server`](commits/config/mariadb_server) to check that any details about your affiliation are correct. Details on these files can be found in the commits directory [README.md](commits/README.md).
