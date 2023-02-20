@@ -73,6 +73,21 @@ def ReadRegexpEmailAliases(name):
     file.close()
 
 
+def ReadCategoryMap(name):
+    try:
+        file = open(name, 'r')
+    except IOError:
+        croak('Unable to open category map file %s' % (name))
+    line = ReadConfigLine(file)
+    while line:
+        m = re.match('^("[^"]+"|\S+)\s+(.+)$', line)
+        if not m or len(m.groups()) != 2:
+            croak('Funky category map line "%s"' % (line))
+        database.AddCategoryMap(m.group(1).replace('"', ''), m.group(2).replace('"', ''))
+        line = ReadConfigLine(file)
+    file.close()
+
+
 #
 # The Email/Employer map
 #
@@ -197,7 +212,9 @@ def ConfigFile(name, confdir):
         sline = line.split(None, 2)
         if len(sline) < 2:
             croak('Funky config line: "%s"' % (line))
-        if sline[0] == 'EmailAliases':
+        if sline[0] == 'CategoryMap':
+            ReadCategoryMap(os.path.join(confdir, sline[1]))
+        elif sline[0] == 'EmailAliases':
             ReadEmailAliases(os.path.join(confdir, sline[1]))
         elif sline[0] == 'RXEmailAliases':
             ReadRegexpEmailAliases(os.path.join(confdir, sline[1]))

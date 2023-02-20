@@ -102,23 +102,46 @@ def OutputHackersCSV (file, hlist):
                          len(hacker.patches),
                          hacker.added, hacker.removed))
 
-__all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'store_patch' ]
-
 
 def OutputEmployersCSV (file, elist):
     if file is None:
         return
-    file.write ("Name,Hackers,Commits,Lines Added,Lines Removed\n")
+    file.write ("Name,Category,Hackers,Commits,Lines Added,Lines Removed\n")
     for employer in elist:
         if employer.count > 0:
-            file.write ("\"%s\",%d,%d,%d,%d\n" %
+            file.write ("\"%s\",\"%s\",%d,%d,%d,%d\n" %
                         (employer.name,
+                         employer.category,
                          len(employer.hackers),
                          employer.count,
                          employer.added,
                          employer.removed))
 
-__all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'OutputEmployersCSV', 'store_patch' ]
+def OutputCategoriesCSV (file, elist):
+    if file is None:
+        return
+    file.write ("Category,Organisations,Hackers,Commits,Lines Added,Lines Removed\n")
+    categories = { }
+    for employer in elist:
+        if employer.count > 0:
+            if employer.category not in categories:
+                categories[employer.category] = dict(organisations = 0, hackers = 0, count = 0, added = 0, removed = 0)
+            categories[employer.category]['hackers'] = categories[employer.category]['hackers'] + len(employer.hackers)
+            categories[employer.category]['organisations'] = categories[employer.category]['organisations'] + 1
+            categories[employer.category]['count'] = categories[employer.category]['count'] + employer.count
+            categories[employer.category]['added'] = categories[employer.category]['added'] + employer.added
+            categories[employer.category]['removed'] = categories[employer.category]['removed'] + employer.removed
+    for category in categories:
+        file.write ("\"%s\",%d,%d,%d,%d,%d\n" %
+                    (category,
+                     categories[category]['organisations'],
+                     categories[category]['hackers'],
+                     categories[category]['count'],
+                     categories[category]['added'],
+                     categories[category]['removed']))
+
+
+__all__ = [  'AccumulatePatch', 'OutputCSV', 'OutputHackersCSV', 'OutputEmployersCSV', 'OutputCategoriesCSV', 'store_patch' ]
 
 
 

@@ -38,5 +38,4 @@ echo "Generating category config"
 echo "Processing git log"
 mkdir -p output/$TREE
 #gitdm/gitdm -c config/mariadb_server/gitdm.config -u -U -n -H output/$TREE/people-$2..$3.csv -E output/$TREE/organisations-$2..$3.csv < git_trees/git.log > output/$TREE/out-$2..$3.txt
-gitdm/gitdm -c config/mariadb_server/gitdm.config -n -H output/$TREE/people-$2..$3.csv -E output/$TREE/organisations-$2..$3.csv < git_trees/git.log > output/$TREE/out-$2..$3.txt
-gitdm/gitdm -c config/mariadb_server_categories/gitdm.config -u -U -n -E output/$TREE/categories-$2..$3.csv < git_trees/git.log > output/$TREE/categories_out-$2..$3.txt
+gitdm/gitdm -c config/mariadb_server/gitdm.config -n -H output/$TREE/people-$2..$3.csv -E output/$TREE/organisations-$2..$3.csv -A output/$TREE/categories-$2..$3.csv < git_trees/git.log > output/$TREE/out-$2..$3.txt

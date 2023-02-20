@@ -168,6 +168,7 @@ def ApplyFirstTag(tag):
 class Employer:
     def __init__(self, name):
         self.name = name
+        self.category = GetCategory(name)
         self.added = self.removed = self.count = self.changed = 0
         self.sobs = 0
         self.hackers = [ ]
@@ -353,3 +354,17 @@ def CheckAliases():
         remapped = RemapEmail(email)
         if email != remapped:
             print(f'WARNING: {email} is masked by an alias entry ({remapped})')
+
+CategoriesList = { }
+
+def AddCategoryMap(employer, category):
+    try:
+        CategoriesList[category].append(employer)
+    except KeyError:
+        CategoriesList[category] = [employer]
+
+def GetCategory(employer):
+    for category, employers in CategoriesList.items():
+        if employer in employers:
+            return category
+    return "Unknown"

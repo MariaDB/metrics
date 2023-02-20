@@ -39,6 +39,7 @@ CSVFile = None
 CSVPrefix = None
 HackersCSV = None
 EmployersCSV = None
+CategoriesCSV = None
 AkpmOverLt = 0
 DumpDB = 0
 CFName = 'gitdm.config'
@@ -80,12 +81,14 @@ def ParseOpts():
     global DateStats, AuthorSOBs, FileFilter, AkpmOverLt, DumpDB
     global CFName, CSVFile, CSVPrefix,DirName, Aggregate, Numstat
     global ReportByFileType, ReportUnknowns, CompanyFilter, FileReport
-    global HackersCSV, EmployersCSV
+    global HackersCSV, EmployersCSV, CategoriesCSV
 
-    opts, rest = getopt.getopt(sys.argv[1:], 'ab:dC:c:Df:E:H:h:l:no:p:r:R:stUuwx:yz')
+    opts, rest = getopt.getopt(sys.argv[1:], 'A:ab:dC:c:Df:E:H:h:l:no:p:r:R:stUuwx:yz')
     for opt in opts:
         if opt[0] == '-a':
             AkpmOverLt = 1
+        elif opt[0] == '-A':
+            CategoriesCSV = open(opt[1], 'w')
         elif opt[0] == '-b':
             DirName = opt[1]
         elif opt[0] == '-C':
@@ -582,6 +585,10 @@ if HackersCSV:
 if EmployersCSV:
     csvdump.OutputEmployersCSV(EmployersCSV, elist);
     EmployersCSV.close()
+
+if CategoriesCSV:
+    csvdump.OutputCategoriesCSV(CategoriesCSV, elist);
+    CategoriesCSV.close()
 
 if CSVPrefix:
     csvdump.save_csv(CSVPrefix)
