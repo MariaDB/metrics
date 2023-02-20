@@ -33,8 +33,6 @@ fi
 COMMAND="git --git-dir $TREE/.git log ${BRANCHES} --cherry-pick --numstat -M --since-as-filter=\"$2\" --until=\"$END_DATE\" > git.log"
 eval "$COMMAND"
 cd ..
-echo "Generating category config"
-./parse_categories.py
 echo "Processing git log"
 mkdir -p output/$TREE
 #gitdm/gitdm -c config/mariadb_server/gitdm.config -u -U -n -H output/$TREE/people-$2..$3.csv -E output/$TREE/organisations-$2..$3.csv < git_trees/git.log > output/$TREE/out-$2..$3.txt

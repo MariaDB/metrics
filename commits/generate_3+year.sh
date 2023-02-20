@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for REPO in "mariadb/server" "mariadb-corporation/mariadb-columnstore-engine" "mariadb-corporation/libmarias3"
+for REPO in "mariadb/server" "mariadb-corporation/mariadb-columnstore-engine" "mariadb-corporation/libmarias3" "mariadb/mariadb_kernel" "mariadb/mariadb-docker"
 do
     TREE=$(basename $REPO)
     for YEARS_AGO in 0 1 2 3
