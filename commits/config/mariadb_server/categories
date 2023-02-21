@@ -4,7 +4,11 @@
 # Organisation              Category
 Independent               Other
 GSoC                      GSoC
+CHECK24                   Provider
 Codership                 Provider
+Comcast                   Provider
+Exherbo                   Distro
+"Finanz Informatik"       Provider
 "MariaDB Corporation"     "MariaDB Corporation"
 Gentoo                    Distro
 "MariaDB Foundation"      "MariaDB Foundation"
@@ -37,6 +41,7 @@ M2Mobi                    Provider
 MySQL                     Provider
 "Sun Microsystems"        Provider
 OmniOS                    Distro
+Orange                    Provider
 Percona                   Sponsor
 ScaleFlux                 Provider
 SkySQL                    "MariaDB Corporation"
@@ -60,4 +65,4 @@ GoSecure                  Provider
 NetBSD                    Distro
 Teramind                  Provider
 HardenedBSD               Distro
-
+Uniontech                 Provider

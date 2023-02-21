@@ -22,9 +22,9 @@ else
 fi
 echo "Extracting git log"
 if [ $TREE = "server" ]; then
-    BRANCHES="--remotes=\"origin/10.[0-9]\" --remotes=\"origin/10.1[0-9]\""
+    BRANCHES="--remotes=\"*/10.[0-9]\" --remotes=\"*/10.1[0-9]\" --remotes=\"*/11.[0-9]\""
 elif [ $TREE = "mariadb-columnstore-engine" ]; then
-    BRANCHES="--remotes=\"origin/develo?\" --remotes=\"origin/develop-1.[0-9]\" --remotes=\"origin/develop-[5-9]\""
+    BRANCHES="--remotes=\"origin/develo?\" --remotes=\"origin/develop-1.[0-9]\" --remotes=\"origin/develop-[5-9]\"  --remotes=\"origin/develop-2[0-9].[0-9][0-9]\""
 elif [ $TREE = "libmarias3" ]; then
     BRANCHES="origin/master"
 else
