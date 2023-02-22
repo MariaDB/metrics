@@ -3,6 +3,7 @@
 "Alpine Linux"            Distro
 "Arch Linux"              Distro
 "Artix Linux"             Distro
+"Best Practical"          Provider
 "Finanz Informatik"       Provider
 "Gruppo Mondadori (Mondadori Group)"    Provider
 "HiQ Finland"             Provider
@@ -15,6 +16,7 @@
 "Oracle Corporation"      Provider
 "SUSE Linux"              Distro
 "Scutech Corporation"     Provider
+"Stellar Science"         Provider
 "Sun Microsystems"        Provider
 "Trail of Bits"           Other
 "Wind River"              Provider
@@ -48,17 +50,20 @@ Kitware                   Provider
 Kontron                   Provider
 M2Mobi                    Provider
 MySQL                     Provider
+MSYS2                     Distro
 NetBSD                    Distro
 Nichi-in                  Provider
 OmniOS                    Distro
 OpenBSD                   Distro
 Orange                    Provider
 Otto                      Provider
+OVHcloud                  Provider
 Percona                   Sponsor
 PingCAP                   Provider
 Rechnerherz               Provider
 RedHat                    Sponsor
 ScaleFlux                 Provider
+Seravo                    Provider
 ServiceNow                Sponsor
 SkySQL                    "MariaDB Corporation"
 Tempesta                  "MariaDB Corporation"
