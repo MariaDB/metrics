@@ -1,9 +1,11 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <GITHUB_PATH> <START_DATE> <END_DATE>"
+if [ "$#" -ne 4 ]; then
+    echo "Usage: $0 <GITHUB_PATH> <START_DATE> <END_DATE> <NO_UPDATE>"
+    echo "NO_UPDATE should be 0 to update the git trees, any other number to"
+    echo "skip the update."
     echo "So for all of 2020 with MariaDB Server do:"
-    echo "$0 mariadb/server 2020-01-01 2020-12-31"
+    echo "$0 mariadb/server 2020-01-01 2020-12-31 0"
     exit 1
 fi
 mkdir -p git_trees
@@ -11,14 +13,16 @@ cd git_trees
 TREE=$(basename $1)
 # End date is exclusive so need to add one day to it
 END_DATE=$(date +%Y-%m-%d -d "$3+1 day")
-if [ -d "$TREE" ]; then
-    echo "Updating repo $1"
-    cd $TREE
-    git fetch
-    cd ..
-else
-    echo "Cloning repo $1"
-    git clone https://github.com/$1 --no-tags
+if [ $4 -eq 0 ]; then
+    if [ -d "$TREE" ]; then
+        echo "Updating repo $1"
+        cd $TREE
+        git fetch
+        cd ..
+    else
+        echo "Cloning repo $1"
+        git clone https://github.com/$1 --no-tags
+    fi
 fi
 echo "Extracting git log"
 if [ $TREE = "server" ]; then

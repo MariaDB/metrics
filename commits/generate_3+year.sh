@@ -9,7 +9,7 @@ do
         END_DATE=$(date +%Y-%m-%d -d "`date +%Y-12-31` -$YEARS_AGO years")
         YEAR=$(date +%Y -d "`date +%Y-01-01` -$YEARS_AGO years")
         echo "Generating $YEAR for $REPO"
-        ./parse_git_log.sh $REPO $START_DATE $END_DATE
+        ./parse_git_log.sh $REPO $START_DATE $END_DATE $YEARS_AGO
         sed -i "1s/\$/,Year/; 2,\$s/\$/,$YEAR/" output/$TREE/people-$START_DATE..$END_DATE.csv
         if [ $YEARS_AGO -eq 0 ]
         then
