@@ -1,68 +1,74 @@
-# This file is not yet used by gitdm, it categorises organisations into
-# groupings
-
+# This file categorises organisations into groupings
 # Organisation              Category
-Independent               Other
-GSoC                      GSoC
+"Alpine Linux"            Distro
+"Arch Linux"              Distro
+"Artix Linux"             Distro
+"Finanz Informatik"       Provider
+"Gruppo Mondadori (Mondadori Group)"    Provider
+"HiQ Finland"             Provider
+"Jacob Elektronik"        Provider
+"JD.com (Jingdong)"       Provider
+"Kali Linux"              Distro
+"MariaDB Corporation"     "MariaDB Corporation"
+"MariaDB Foundation"      "MariaDB Foundation"
+"Monty Program"           "MariaDB Corporation"
+"Oracle Corporation"      Provider
+"SUSE Linux"              Distro
+"Scutech Corporation"     Provider
+"Sun Microsystems"        Provider
+"Trail of Bits"           Other
+"Wind River"              Provider
+"Worldline Global"        Provider
+Aerospike                 Provider
+Amazon                    Provider
+Appian                    Provider
+Arm                       Provider
+Atos                      Distro
+Baidu                     Provider
 CHECK24                   Provider
+CONNECT                   Provider
+ClearCode                 Provider
 Codership                 Provider
 Comcast                   Provider
+Dataworkz                 Provider
+Docker                    Provider
 Exherbo                   Distro
-"Finanz Informatik"       Provider
-"MariaDB Corporation"     "MariaDB Corporation"
-Gentoo                    Distro
-"MariaDB Foundation"      "MariaDB Foundation"
-Amazon                    Provider
-FreeBSD                   Distro
-OpenBSD                   Distro
-Tencent                   Sponsor
-Vettabase                 Provider
-"Oracle Corporation"      Provider
-"JD.com (Jingdong)"       Provider
-RedHat                    Sponsor
-Huawei                    Provider
-"Scutech Corporation"     Provider
-Nichi-in                  Provider
-FromDual                  Provider
-CONNECT                   Provider
-ServiceNow                Sponsor
-Arm                       Provider
-"Alpine Linux"            Distro
-Appian                    Provider
-"Artix Linux"             Distro
-Atos                      Distro
-ClearCode                 Provider
 FRUCT                     Provider
+FreeBSD                   Distro
+FromDual                  Provider
+GSoC                      GSoC
+Gentoo                    Distro
+GoSecure                  Provider
+HardenedBSD               Distro
+Huawei                    Provider
 IBM                       Sponsor
-"Kali Linux"              Distro
+Independent               Other
+InfoSiftr                 Provider
 Kitware                   Provider
+Kontron                   Provider
 M2Mobi                    Provider
-"Monty Program"           "MariaDB Corporation"
 MySQL                     Provider
-"Sun Microsystems"        Provider
+NetBSD                    Distro
+Nichi-in                  Provider
 OmniOS                    Distro
+OpenBSD                   Distro
 Orange                    Provider
+Otto                      Provider
 Percona                   Sponsor
+PingCAP                   Provider
+Rechnerherz               Provider
+RedHat                    Sponsor
 ScaleFlux                 Provider
+ServiceNow                Sponsor
 SkySQL                    "MariaDB Corporation"
-"SUSE Linux"              Distro
 Tempesta                  "MariaDB Corporation"
+Tencent                   Sponsor
+Teramind                  Provider
 TileDB                    Provider
 Tokutek                   Sponsor
-Percona                   Sponsor
-"Wind River"              Provider
-"Gruppo Mondadori (Mondadori Group)"    Provider
-"Trail of Bits"           Other
-"HiQ Finland"             Provider
-Zulip                     Other
-"Worldline Global"        Provider
-Kontron                   Provider
-Aerospike                 Provider
-VilniusDB                 Provider
-Baidu                     Provider
-"Arch Linux"              Distro
-GoSecure                  Provider
-NetBSD                    Distro
-Teramind                  Provider
-HardenedBSD               Distro
 Uniontech                 Provider
+Vettabase                 Provider
+VilniusDB                 Provider
+Voxygen                   Provider
+Wodby                     Provider
+Zulip                     Other
