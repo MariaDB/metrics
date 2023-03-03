@@ -33,6 +33,7 @@ ClearCode                 Provider
 Codership                 Provider
 Comcast                   Provider
 Dataworkz                 Provider
+Debian                    Distro
 Docker                    Provider
 Exherbo                   Distro
 FRUCT                     Provider
