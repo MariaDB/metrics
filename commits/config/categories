@@ -22,7 +22,7 @@
 "Wind River"              Provider
 "Worldline Global"        Provider
 Aerospike                 Provider
-Amazon                    Provider
+Amazon                    Other
 Appian                    Provider
 Arm                       Provider
 Atos                      Distro
