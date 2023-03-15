@@ -10,9 +10,9 @@
 "Jacob Elektronik"        Provider
 "JD.com (Jingdong)"       Provider
 "Kali Linux"              Distro
-"MariaDB Corporation"     "MariaDB Corporation"
+"MariaDB Plc."     "MariaDB Plc."
 "MariaDB Foundation"      "MariaDB Foundation"
-"Monty Program"           "MariaDB Corporation"
+"Monty Program"           "MariaDB Plc."
 "Oracle Corporation"      Provider
 "SUSE Linux"              Distro
 "Scutech Corporation"     Provider
@@ -62,12 +62,12 @@ OVHcloud                  Provider
 Percona                   Sponsor
 PingCAP                   Provider
 Rechnerherz               Provider
-RedHat                    Distro
+Red Hat                    Distro
 ScaleFlux                 Provider
 Seravo                    Provider
 ServiceNow                Sponsor
-SkySQL                    "MariaDB Corporation"
-Tempesta                  "MariaDB Corporation"
+SkySQL                    "MariaDB Plc."
+Tempesta                  "MariaDB Plc."
 Tencent                   Sponsor
 Teramind                  Provider
 TileDB                    Provider
