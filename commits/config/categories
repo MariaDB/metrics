@@ -14,14 +14,17 @@
 "MariaDB Foundation"      "MariaDB Foundation"
 "Monty Program"           "MariaDB Plc."
 "Oracle Corporation"      Provider
+"Red Hat"                 Distro
 "SUSE Linux"              Distro
 "Scutech Corporation"     Provider
+"Standard Chartered Bank" Provider
 "Stellar Science"         Provider
 "Sun Microsystems"        Provider
 "Trail of Bits"           Other
 "Wind River"              Provider
 "Worldline Global"        Provider
 Aerospike                 Provider
+Alibaba                   Provider
 Amazon                    Other
 Appian                    Provider
 Arm                       Provider
@@ -41,6 +44,7 @@ FreeBSD                   Distro
 FromDual                  Provider
 GSoC                      GSoC
 Gentoo                    Distro
+Google                    Provider
 GoSecure                  Provider
 HardenedBSD               Distro
 Huawei                    Provider
@@ -49,6 +53,7 @@ Independent               Other
 InfoSiftr                 Provider
 Kitware                   Provider
 Kontron                   Provider
+KubeVela                  Provider
 M2Mobi                    Provider
 MySQL                     Provider
 MSYS2                     Distro
@@ -62,7 +67,6 @@ OVHcloud                  Provider
 Percona                   Sponsor
 PingCAP                   Provider
 Rechnerherz               Provider
-Red Hat                    Distro
 ScaleFlux                 Provider
 Seravo                    Provider
 ServiceNow                Sponsor
