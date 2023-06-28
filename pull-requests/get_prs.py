@@ -23,6 +23,7 @@ def get_paginated_data(url):
         if response.status_code != 200:
             print("Failed to get json data")
             exit()
+        # TODO: calculate backoff better using all the headers given
         if (int(response.headers['X-RateLimit-Remaining']) <= 5):
             print('_', end='')
             time.sleep(2)
@@ -124,7 +125,6 @@ def call_first_response(url):
 def call_github(url):
     pr_data = get_json_data(url)
     count = pr_data['total_count']
-    # Avoid 30 requests per minute limit
     return count
 
 def generate(start_wn, end_wn):
@@ -161,7 +161,6 @@ def generate(start_wn, end_wn):
         total_open_count = call_github(total_open_url)
         total_close_count = call_github(total_close_url)
         first_response = call_first_response(first_response_url)
-        #print(first_response)
 
         if first_response['with_comments']:
             average_response = round(first_response['total_days'] / first_response['with_comments'], 1)
