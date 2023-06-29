@@ -134,7 +134,7 @@ def generate(start_wn, end_wn):
 
     filename = "prs-{}..{}.csv".format(start_wn, end_wn)
     f = open(filename, "w")
-    f.write('Week Ending,New PRs,Closed PRs,Merged PRs,Total PRs,Still Open PRs,Time to first response,Total responded,Total non-responded\n')
+    f.write('Week Ending,New PRs,Closed PRs,Merged PRs,Total PRs,Still Open PRs,Days to first response,New PRs responded,New PRs not responded\n')
 
     begin_date = datetime.datetime.strptime(start_wn + '-1', "%Y-W%W-%w")
     finish_date = datetime.datetime.strptime(end_wn + '-1', "%Y-W%W-%w")
