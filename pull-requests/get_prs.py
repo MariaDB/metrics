@@ -21,12 +21,12 @@ def get_paginated_data(url):
     while(True):
         response = requests.get(url, headers = auth_header)
         if response.status_code != 200:
-            print("Failed to get json data")
+            print("Failed to get json data: " + str(response.headers))
             exit()
         # TODO: calculate backoff better using all the headers given
-        if (int(response.headers['X-RateLimit-Remaining']) <= 5):
+        if (int(response.headers['X-RateLimit-Remaining']) <= 2):
             print('_', end='')
-            time.sleep(2)
+            time.sleep(30)
         else:
             print('.', end='')
         sys.stdout.flush()
@@ -41,11 +41,11 @@ def get_paginated_data(url):
 def get_json_data(url):
     response = requests.get(url, headers = auth_header)
     if response.status_code != 200:
-        print("Failed to get json data")
+        print("Failed to get json data: " + str(response.headers))
         exit()
-    if (int(response.headers['X-RateLimit-Remaining']) <= 5):
+    if (int(response.headers['X-RateLimit-Remaining']) <= 2):
         print('_', end='')
-        time.sleep(2)
+        time.sleep(30)
     else:
         print('.', end='')
     sys.stdout.flush()
@@ -100,10 +100,12 @@ def parse_comments(comment_data, review_data, user):
 def call_first_response(url):
     pr_data = get_paginated_data(url)
     pr_info = []
-    counters = {'total_days': 0, 'with_comments': 0, 'without_comments': 0}
+    counters = {'total_days': 0, 'with_comments': 0, 'without_comments': 0, 'uncounted': 0, 'self_merge': 0}
     for pr_list in pr_data:
         for pr in pr_list['items']:
-            pr_info.append({"pr": pr['number'], "user": pr['user']['login'], "created_at": pr['created_at']})
+            pr_info.append({"pr": pr['number'], "user": pr['user']['login'], "created_at": pr['created_at'], "closed_at": pr['closed_at']})
+            if pr['draft'] == True:
+                print(str(pr['number']) + " draft ")
 
     for pr in pr_info:
         url = "https://api.github.com/repos/MariaDB/server/issues/" + str(pr['pr']) + "/comments"
@@ -112,13 +114,22 @@ def call_first_response(url):
         review_data = get_paginated_data(url)
         comment_date = parse_comments(comments_data, review_data, pr['user'])
         if comment_date is not None:
-            # TODO: Calculate days from date
             pr_date = datetime.datetime.fromisoformat(pr['created_at'])
             c_date = datetime.datetime.fromisoformat(comment_date)
             counters['total_days'] = counters['total_days'] + (c_date - pr_date).days
             counters['with_comments'] = counters['with_comments'] + 1
         else:
-            counters['without_comments'] = counters['without_comments'] + 1
+            close_data = get_json_data("https://api.github.com/repos/MariaDB/server/issues/" + str(pr['pr']))
+            #print(pr['pr'])
+            if close_data["state"] == "closed" and "closed_by" in close_data and close_data['user']['login'] == close_data['closed_by']['login']:
+                # Self merge with no developer comments
+                if close_data['pull_request']['merged_at'] is not None:
+                    counters['self_merge'] = counters['self_merge'] + 1
+                # Self closed with no developer comments
+                else:
+                    counters['uncounted'] = counters['uncounted'] + 1
+            else:
+                counters['without_comments'] = counters['without_comments'] + 1
 
     return counters
 
@@ -134,7 +145,7 @@ def generate(start_wn, end_wn):
 
     filename = "prs-{}..{}.csv".format(start_wn, end_wn)
     f = open(filename, "w")
-    f.write('Week Ending,New PRs,Closed PRs,Merged PRs,Total PRs,Still Open PRs,Days to first response,New PRs responded,New PRs not responded\n')
+    f.write('Week Ending,New PRs,Draft PRs,Closed PRs,Merged PRs,Total PRs,Still Open PRs,Days to First Response,New PRs Responded,New PRs Not Responded,PRs Self Merge No Review,PRs Self Closed No Review\n')
 
     begin_date = datetime.datetime.strptime(start_wn + '-1', "%Y-W%W-%w")
     finish_date = datetime.datetime.strptime(end_wn + '-1', "%Y-W%W-%w")
@@ -150,14 +161,16 @@ def generate(start_wn, end_wn):
         open_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20created:' + start_date + '..' + end_date + '&per_page=1'
         closed_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20is:closed%20closed:' + start_date + '..' + end_date + '&per_page=1'
         merged_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20is:merged%20closed:' + start_date + '..' + end_date + '&per_page=1'
+        draft_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is%3Adraft%20created:' + start_date + '..' + end_date + '&per_page=1'
 
         total_open_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20created:<' + totals_end_date + '&per_page=1'
         total_close_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20closed:<' + totals_end_date + '&per_page=1'
-        first_response_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20created:' + start_date + '..' + end_date + '&per_page=100'
+        first_response_url = 'https://api.github.com/search/issues?q=repo:MariaDB/server%20is:pr%20-is%3Adraft%20created:' + start_date + '..' + end_date + '&per_page=100'
 
         open_count = call_github(open_url)
         close_count = call_github(closed_url)
         merged_count = call_github(merged_url)
+        draft_count = call_github(draft_url)
         total_open_count = call_github(total_open_url)
         total_close_count = call_github(total_close_url)
         first_response = call_first_response(first_response_url)
@@ -166,7 +179,7 @@ def generate(start_wn, end_wn):
             average_response = round(first_response['total_days'] / first_response['with_comments'], 1)
         else:
             average_response = "NULL"
-        f.write('{},{},{},{},{},{},{},{},{}\n'.format(end_date, open_count, close_count - merged_count, merged_count, total_open_count, total_open_count - total_close_count, average_response, first_response['with_comments'], first_response['without_comments']))
+        f.write('{},{},{},{},{},{},{},{},{},{},{},{}\n'.format(end_date, open_count, draft_count, close_count - merged_count, merged_count, total_open_count, total_open_count - total_close_count, average_response, first_response['with_comments'], first_response['without_comments'], first_response['self_merge'], first_response['uncounted']))
         current_date = current_date + datetime.timedelta(days=7)
         print("Done!")
     f.close()
