@@ -1,17 +1,9 @@
 #!/usr/bin/python3
 
-import requests
-import json
 import datetime
-import time
-import os
-import re
-import sys
 import argparse
+import pr_github as gh
 
-GITHUB_TOKEN = os.environ['GITHUB_TOKEN']
-
-auth_header = {'Authorization': 'token ' + GITHUB_TOKEN}
 
 idx = (datetime.datetime.today().weekday() + 1) % 7
 sun = datetime.datetime.today() - datetime.timedelta(idx)
@@ -19,43 +11,10 @@ user_list = []
 verbose = False
 
 
-def get_data(url):
-    response = requests.get(url, headers = auth_header)
-    if response.status_code != 200:
-        print("Failed to get json data: " + str(response.headers))
-        exit()
-    if (int(response.headers['X-RateLimit-Remaining']) <= 2):
-        if verbose:
-            print("\nRate limit low, remaining " + response.headers['X-RateLimit-Remaining'] + " sleeping for 30 seconds", end='')
-        else:
-            print('_', end='')
-        time.sleep(30)
-    else:
-        print('.', end='')
-    sys.stdout.flush()
-
-    return response
-
-def get_paginated_data(url):
-    data = []
-    while(True):
-        response = get_data(url)
-        data.append(json.loads(response.text))
-        try:
-            groups = re.search(r"<([^<]*)>; rel=\"next\"", response.headers['Link'])
-            url = groups.group(1)
-        except:
-            break
-    return data
-
-def get_json_data(url):
-    response = get_data(url)
-    return json.loads(response.text)
-
 def call_get_users():
     print("Getting users", end='')
     url = 'https://api.github.com/orgs/MariaDB/members'
-    user_data = get_paginated_data(url)
+    user_data = gh.get_paginated_data(url, verbose)
     for user_pages in user_data:
         for user in user_pages:
             user_list.append(user['login'])
@@ -102,7 +61,7 @@ def parse_comments(comment_data, review_data, user):
 
 
 def call_first_response(url):
-    pr_data = get_paginated_data(url)
+    pr_data = gh.get_paginated_data(url, verbose)
     pr_info = []
     counters = {'total_days': 0, 'with_comments': 0, 'without_comments': 0, 'uncounted': 0, 'self_merge': 0}
     for pr_list in pr_data:
@@ -115,9 +74,9 @@ def call_first_response(url):
         if verbose:
             print("PR: " + str(pr['pr']), end='')
         url = "https://api.github.com/repos/MariaDB/server/issues/" + str(pr['pr']) + "/comments"
-        comments_data = get_paginated_data(url)
+        comments_data = gh.get_paginated_data(url, verbose)
         url = "https://api.github.com/repos/MariaDB/server/pulls/" + str(pr['pr']) + "/reviews"
-        review_data = get_paginated_data(url)
+        review_data = gh.get_paginated_data(url, verbose)
         comment_date = parse_comments(comments_data, review_data, pr['user'])
         if comment_date is not None:
             pr_date = datetime.datetime.fromisoformat(pr['created_at'])
@@ -127,7 +86,7 @@ def call_first_response(url):
             if verbose:
                 print(" first meaningful comment " + str((c_date - pr_date).days) + " days")
         else:
-            close_data = get_json_data("https://api.github.com/repos/MariaDB/server/issues/" + str(pr['pr']))
+            close_data = gh.get_json_data("https://api.github.com/repos/MariaDB/server/issues/" + str(pr['pr']), verbose)
             #print(pr['pr'])
             if close_data["state"] == "closed" and "closed_by" in close_data and close_data['user']['login'] == close_data['closed_by']['login']:
                 # Self merge with no developer comments
@@ -148,14 +107,18 @@ def call_first_response(url):
     return counters
 
 def call_github(url):
-    pr_data = get_json_data(url)
+    pr_data = gh.get_json_data(url, verbose)
     count = pr_data['total_count']
     return count
 
 def generate(start_wn, end_wn):
     call_get_users()
     # Special case, ottok review shouldn't count but in list
-    user_list.remove("ottok")
+    try:
+        user_list.remove("ottok")
+    except:
+        if verbose:
+            print("Failed to remove Otto from list")
 
     filename = "prs-{}..{}.csv".format(start_wn, end_wn)
     f = open(filename, "w")
