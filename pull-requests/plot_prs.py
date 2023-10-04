@@ -25,7 +25,7 @@ def generate(csv_file):
                 closed_prs.append(int(row[2]))
                 merged_prs.append(int(row[3]))
 
-    fig = plt.figure(tight_layout=True, figsize=[12.8, 9.6])
+    fig = plt.figure(tight_layout=True, figsize=[25.6, 19.2])
 
     width = 0.33
     style.use('fivethirtyeight')

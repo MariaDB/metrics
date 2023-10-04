@@ -17,6 +17,7 @@
 "Red Hat"                 Distro
 "SUSE Linux"              Distro
 "Scutech Corporation"     Provider
+"SGS Serious Gaming & Simulations GmbH" Provider
 "Standard Chartered Bank" Provider
 "Stellar Science"         Provider
 "Sun Microsystems"        Provider
@@ -25,7 +26,7 @@
 "Worldline Global"        Provider
 Aerospike                 Provider
 Alibaba                   Provider
-Amazon                    Other
+Amazon                    Sponsor
 Appian                    Provider
 Arm                       Provider
 Atos                      Distro
@@ -47,6 +48,7 @@ Gentoo                    Distro
 Google                    Provider
 GoSecure                  Provider
 HardenedBSD               Distro
+Homebrew                  Distro
 Huawei                    Provider
 IBM                       Sponsor
 Independent               Other
