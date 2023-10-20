@@ -1,0 +1,4 @@
+.DS_Store
+.apitoken
+*.csv
+!example_first_1000_repos_github_readmes_mysql_no_mariadb 2023-10-20.csv

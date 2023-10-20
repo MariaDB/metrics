@@ -13,3 +13,7 @@ This directory contains a shell script to cache a git log and pipe it into a too
 ## We need your help!
 
 If you are a contributor to MariaDB it would help us immensely if you could look at the files in [`commits/config/`](commits/config/) to check that any details about your affiliation are correct. Details on these files can be found in the commits directory [README.md](commits/README.md).
+
+## READMEs
+
+In this directory there is a Python script to search for repository-READMEs that mention MySQL, but not MariaDB - a starting point for evaluation of repos that should mention MariaDB. The output csv is a list of repos sorted by stars (indicator of popularity) and filtered by activity (last push within a year). 
