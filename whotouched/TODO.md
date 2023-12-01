@@ -1,0 +1,12 @@
+# TODO
+
+* Git repo update / retrieve
+* Email alias processing
+* Code comment / documentation
+* Accelerate get_commit_lines_for_file() by allowing multiple files
+* mkdir outdir
+* Handle submodules we care about (all are skipped for now)
+* Initial commit skipped in get_commit_lines_for_file()
+* Git.__cache grows way too large
+* Execute each section of the config in a different threads/processes
+* Look into pygit2.Tree.__contains__ for potential optimisation

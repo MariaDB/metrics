@@ -1,0 +1,9 @@
+Connect:
+    paths: ["storage/connect"]
+Oqgraph:
+    paths: ["storage/oqgraph"]
+CMake:
+    files_postfix: ["CMakeLists.txt"]
+WIN32:
+    define: "_WIN32"
+    file_types: ["c", "cc", "h", "cpp", "hpp"]
