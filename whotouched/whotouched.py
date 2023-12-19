@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from git import Git
 from file_parser import FileParser
+from anti_alias import AntiAlias
 import csv
 from dataclasses import dataclass
 from operator import getitem
@@ -25,18 +26,22 @@ def get_from_dirs(paths):
 def summarise(commits):
     authors = {}
     commit_ids = []
+    aliases = AntiAlias()
     for commit in commits:
         # De-duplicate as we may be combining lists
         if commit.commit_id in commit_ids:
             continue
         commit_ids.append(commit.commit_id)
         for author in commit.authors:
-            if author.email in authors:
-                old = authors[author.email]
+            email = aliases.get_alias(author.email)
+            if email is None:
+                email = author.email
+            if email in authors:
+                old = authors[email]
                 old["count"] += 1
-                authors[author.email] = old
+                authors[email] = old
             else:
-                authors[author.email] = {"name": author.name, "count": 1}
+                authors[email] = {"name": author.name, "count": 1}
     authors = dict(sorted(authors.items(), key=lambda item: getitem(item[1], 'count'), reverse=True))
     return authors
 
