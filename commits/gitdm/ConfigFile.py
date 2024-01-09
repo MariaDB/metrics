@@ -43,7 +43,7 @@ def ReadEmailAliases(name):
         croak('Unable to open email alias file %s' % (name))
     line = ReadConfigLine(file)
     while line:
-        m = re.match('^("[^"]+"|\S+)\s+(.+)$', line)
+        m = re.match(r'^("[^"]+"|\S+)\s+(.+)$', line)
         if not m or len(m.groups()) != 2:
             croak('Funky email alias line "%s"' % (line))
         if m and m.group(2).find('@') <= 0:
@@ -59,7 +59,7 @@ def ReadRegexpEmailAliases(name):
         croak('Unable to open regex email alias file %s' % (name))
     line = ReadConfigLine(file)
     while line:
-        m = re.match('^("[^"]+"|\S+)\s+(.+)$', line)
+        m = re.match(r'^("[^"]+"|\S+)\s+(.+)$', line)
         if not m or len(m.groups()) != 2:
             croak('Funky email alias line "%s"' % (line))
         if m and m.group(2).find('@') <= 0:
@@ -80,7 +80,7 @@ def ReadCategoryMap(name):
         croak('Unable to open category map file %s' % (name))
     line = ReadConfigLine(file)
     while line:
-        m = re.match('^("[^"]+"|\S+)\s+(.+)$', line)
+        m = re.match(r'^("[^"]+"|\S+)\s+(.+)$', line)
         if not m or len(m.groups()) != 2:
             croak('Funky category map line "%s"' % (line))
         database.AddCategoryMap(m.group(1).replace('"', ''), m.group(2).replace('"', ''))
@@ -168,8 +168,8 @@ def ReadFileType(filename):
         croak('Unable to open file type mapping file %s' % (filename))
     patterns = {}
     order = []
-    regex_order = re.compile('^order\s+(.*)$')
-    regex_file_type = re.compile('^filetype\s+(\S+)\s+(.+)$')
+    regex_order = re.compile(r'^order\s+(.*)$')
+    regex_file_type = re.compile(r'^filetype\s+(\S+)\s+(.+)$')
     line = ReadConfigLine(file)
     while line:
         o = regex_order.match(line)

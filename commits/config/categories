@@ -7,6 +7,7 @@
 "Finanz Informatik"       Provider
 "Gruppo Mondadori (Mondadori Group)"    Provider
 "HiQ Finland"             Provider
+"Institut IDiAL"          Provider
 "Jacob Elektronik"        Provider
 "JD.com (Jingdong)"       Provider
 "Kali Linux"              Distro
@@ -53,10 +54,12 @@ Huawei                    Provider
 IBM                       Sponsor
 Independent               Other
 InfoSiftr                 Provider
+JFrog                     Provider
 Kitware                   Provider
 Kontron                   Provider
 KubeVela                  Provider
 M2Mobi                    Provider
+MonographDB               Provider
 MySQL                     Provider
 MSYS2                     Distro
 NetBSD                    Distro
@@ -76,11 +79,13 @@ SkySQL                    "MariaDB Plc."
 Tempesta                  "MariaDB Plc."
 Tencent                   Sponsor
 Teramind                  Provider
+Tildeslash                Provider
 TileDB                    Provider
 Tokutek                   Sponsor
 Uniontech                 Provider
 Vettabase                 Provider
 VilniusDB                 Provider
 Voxygen                   Provider
+Whatbox                   Provider
 Wodby                     Provider
 Zulip                     Other

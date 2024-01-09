@@ -48,8 +48,8 @@ patterns = {
     'IntMerge2': re.compile(r"^ +Merge .*$"),
     # Another way to get the statistics (per file).
     # It implies --numstat
-    'numstat': re.compile('^(\d+|-)\s+(\d+|-)\s+(.*)$'),
-    'rename' : re.compile('(.*)\{(.*) => (.*)\}(.*)'),
+    'numstat': re.compile(r'^(\d+|-)\s+(\d+|-)\s+(.*)$'),
+    'rename' : re.compile(r'(.*)\{(.*) => (.*)\}(.*)'),
     # Detect errors on svn conversions
     'svn-tag': re.compile("^svn path=/tags/(.*)/?; revision=([0-9]+)$"),
 }
