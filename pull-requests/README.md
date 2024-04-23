@@ -2,7 +2,7 @@
 
 ### get_prs.py
 
-This tool gets the PR counts for 2022 and stores them in `prs-<START>..<END<.csv`. There is a deliberate 2 second pause between each request so as not to hit the GitHub rate limit (30 requests per minute).
+This tool gets the PR counts for 2022 and stores them in `prs-<START>..<END>.csv`. There is rate-limit handling built in because some calls are only allowed to do 30 requests per minute. It will also pause and retry upon 500 server errors.
 
 To execute this you will need a GitHub token from https://github.com/settings/tokens/new and set this as the environment variable `GITHUB_TOKEN`. You need to provide a date range using week numbers. For example, to generate a 2022 report:
 

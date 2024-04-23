@@ -11,21 +11,31 @@ auth_header = {'Authorization': 'token ' + GITHUB_TOKEN}
 
 
 def get_data(url, verbose):
-    response = requests.get(url, headers = auth_header)
-    if response.status_code != 200:
-        print("Failed to get json data: " + str(response.headers))
-        exit()
-    if (int(response.headers['X-RateLimit-Remaining']) <= 2):
-        if verbose:
-            print("\nRate limit low, remaining " + response.headers['X-RateLimit-Remaining'] + " sleeping for 30 seconds", end='')
+    while(True):
+        response = requests.get(url, headers = auth_header)
+        if response.status_code == 500:
+            if verbose:
+                print("\nServer error, retrying in 30 seconds")
+            else:
+                print('*', end='')
+            sys.stdout.flush()
+            time.sleep(30)
+        elif response.status_code != 200:
+            print("\nFailed to get json data: " + str(response.headers))
+            print("URL: " + url)
+            print("Status code: " + str(response.status_code))
+            exit()
+        elif (int(response.headers['X-RateLimit-Remaining']) <= 2):
+            if verbose:
+                print("\nRate limit low, remaining " + response.headers['X-RateLimit-Remaining'] + " sleeping for 30 seconds", end='')
+            else:
+                print('_', end='')
+            sys.stdout.flush()
+            time.sleep(30)
         else:
-            print('_', end='')
-        time.sleep(30)
-    else:
-        print('.', end='')
-    sys.stdout.flush()
-
-    return response
+            print('.', end='')
+            sys.stdout.flush()
+            return response
 
 def get_paginated_data(url, verbose):
     data = []
