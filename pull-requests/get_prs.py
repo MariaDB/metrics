@@ -37,6 +37,10 @@ def parse_comments(comment_data, review_data, user):
     for review_list in review_data:
         for review in review_list:
             if user != review['user']['login'] and review['user']['login'] in user_list:
+                # It is possible that the user generating this list has a review
+                # saved, but not submitted yet, so there is no submission date.
+                if 'submitted_at' != review:
+                    continue
                 review_date = review['submitted_at']
                 break
         if review_date is not None:
