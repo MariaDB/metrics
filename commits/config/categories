@@ -24,9 +24,11 @@
 "Sun Microsystems"        Provider
 "Trail of Bits"           Other
 "University of Sydney"    Other
+"University College London" Other
 "Wind River"              Provider
 "Worldline Global"        Provider
 Aerospike                 Provider
+Akamai                    Provider
 Alibaba                   Provider
 Amazon                    Sponsor
 Appian                    Provider
