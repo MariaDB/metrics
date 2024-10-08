@@ -26,7 +26,7 @@ if [ $4 -eq 0 ]; then
 fi
 echo "Extracting git log"
 if [ $TREE = "server" ]; then
-    BRANCHES="--remotes=\"*/10.[0-9]\" --remotes=\"*/10.1[0-9]\" --remotes=\"*/11.[0-9]\""
+    BRANCHES="--remotes=\"*/10.[0-9]\" --remotes=\"*/10.1[0-9]\" --remotes=\"*/11.[0-9]\" --remotes=\"*/main\""
 elif [ $TREE = "mariadb-columnstore-engine" ]; then
     BRANCHES="--remotes=\"*/develo?\" --remotes=\"*/develop-1.[0-9]\" --remotes=\"*/develop-[5-9]\"  --remotes=\"*/develop-2[0-9].[0-9][0-9]\""
 elif [ $TREE = "mariadb-connector-c" ]; then

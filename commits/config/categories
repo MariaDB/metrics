@@ -39,6 +39,7 @@ CHECK24                   Provider
 Chainguard                Provider
 CONNECT                   Provider
 ClearCode                 Provider
+ClickHouse                Provider
 Codership                 Provider
 Comcast                   Provider
 Dataworkz                 Provider
@@ -58,6 +59,7 @@ Huawei                    Provider
 IBM                       Sponsor
 Independent               Other
 InfoSiftr                 Provider
+IONOS                     Sponsor
 JFrog                     Provider
 Kitware                   Provider
 Kontron                   Provider
@@ -75,6 +77,7 @@ Otto                      Provider
 OVHcloud                  Provider
 Percona                   Sponsor
 PingCAP                   Provider
+Rakuten                   Provider
 Rechnerherz               Provider
 ScaleFlux                 Provider
 Seravo                    Provider
