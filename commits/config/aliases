@@ -3,6 +3,8 @@
 #
 # Alias first, then the email address to link it to.
 # Attempting to keep it in alphabetical order based on first column.
+"anel husakovic"                                anel@mariadb.org
+"varun gupta"                                   varun.gupta@mariadb.com
 102637268+kirillperov@users.noreply.github.com  kirill.perov@mariadb.com
 105884371+fluesvamp@users.noreply.github.com    askeblad@outlook.com
 108760288+mariadb-luislizardo@users.noreply.github.com luis.lizardo@mariadb.com
@@ -11,6 +13,7 @@
 43503225+pleblanc1976@users.noreply.github.com  patrick.leblanc@mariadb.com
 46791326+rucha174@users.noreply.github.com      rucha.deodhar@mariadb.com
 50832275+hartmut-mariadb@users.noreply.github.com hartmut@mariadb.com
+56494179+anson1014@users.noreply.github.com     ansodchu@amazon.com
 59557163+mariadb-susilbehera@users.noreply.github.com susil.behera@mariadb.com
 61234003+mysqlonarm@users.noreply.github.com    mysqlonarm@gmail.com
 62115046+mariadb-romannavrotskiy@users.noreply.github.com  roman.nozdrin@mariadb.com
@@ -28,9 +31,6 @@ alice.sherepa@gmail.com                         alice.sherepa@mariadb.com
 allen@allens-black-macbook-pro.local            allen.herrera@mariadb.com
 an3l@users.noreply.github.com                   anel@mariadb.org
 andrew@mariadb.org                              andrew@linuxjedi.co.uk
-"anel husakovic"                                anel@mariadb.org
-56494179+anson1014@users.noreply.github.com     ansodchu@amazon.com
-ji@haidongji.com                                haidongj@amazon.com
 bar@home.dlink                                  bar@mariadb.com
 ben.thompson.015@gmail.com                      ben.thompson@mariadb.com
 chriscalender@gmail.com                         chris@mariadb.com
@@ -38,38 +38,38 @@ claprix@yandex.ru                               kosov.eugene@mariadb.com
 contact@leandropacheco.com                      leandro.pacheco@galeracluster.com
 cvicentiu@gmail.com                             vicentiu@mariadb.org
 daniel@linux.ibm.com                            daniel@mariadb.org
-davidmott@debian-8-dev.dallas-robotics.com      david.mott@mariadb.com
 davidmott@build-debian-8.dallas-robotics.com    david.mott@mariadb.com
+davidmott@debian-8-dev.dallas-robotics.com      david.mott@mariadb.com
 db@dbart.us                                     daniel.bartholomew@mariadb.com
 dbart@askmonty.org                              daniel.bartholomew@mariadb.com
-diego.dupinmariadb.com                          diego.dupin@mariadb.com
-diego.dupin@gmail.com                           diego.dupin@mariadb.com
 dennis.khalikov@gmail.com                       dennis.khalikov@mariadb.com
+diego.dupin@gmail.com                           diego.dupin@mariadb.com
+diego.dupinmariadb.com                          diego.dupin@mariadb.com
 drrtuy@gmail.com                                roman.nozdrin@mariadb.com
 faustin@fala.red                                faustin@mariadb.org
 gagan.nith@gmail.com                            gagan.goel@mariadb.com
 geoff.montee@gmail.com                          geoff.montee@mariadb.com
 git@darkain.com                                 github@darkain.com
-github@greenman.co.za                           ian@mariadb.org
 github+dockerlibrarybot@infosiftr.com           joe@infosiftr.com
+github@greenman.co.za                           ian@mariadb.org
 grooverdan@users.sourceforge.net                daniel@mariadb.org
 hartmut@php.net                                 hartmut@mariadb.com
 helmut@subdivi.de                               helmut@debian.org
 jaakolatommi@gmail.com                          seppo.jaakola@codership.com
+ji@haidongji.com                                haidongj@amazon.com
 jmrojas2332@gmail.com                           jose.rojas@mariadb.com
 krunalbauskar@gmail.com                         mysqlonarm@gmail.com
 l.fedorov@mail.corp.ru                          leonid.fedorov@mariadb.com
 maghermit@maghermit.com                         vladkakurin007@gmail.com
-markus456@gmail.com                             markus.makela@mariadb.com
 marko.makela@iki.fi                             marko.makela@mariadb.com
+markus456@gmail.com                             markus.makela@mariadb.com
 martin11lrx@gmail.com                           martin.montes@mariadb.com
 mcfadden7586@gmail.com                          david.hall@mariadb.com
-mkaruza@users.noreply.github.com                mario.karuza@galeracluster.com
 midenok@gmail.com                               aleksey.midenkov@mariadb.com
 mike.chalov@gmail.com                           mcchalov@amazon.com
+mkaruza@users.noreply.github.com                mario.karuza@galeracluster.com
 mott.david.j@gmail.com                          david.mott@mariadb.com
-# NOTE: This might cause issues later, but for now it is the only person who did this
-name@localhost.localdomain                      sergei.krivonos@mariadb.com
+name@localhost.localdomain                      sergei.krivonos@mariadb.com # NOTE: This might cause issues later, but for now it is the only person who did this
 nayuta.yanagisawa@gmail.com                     nayuta.yanagisawa@mariadb.com
 nayuta.yanagisawa@hey.com                       nayuta.yanagisawa@mariadb.com
 olegs@teramind.co                               olernov@gmail.com
@@ -85,21 +85,22 @@ root@pm1.xentio.lan                             zdravelina.sokolovska@mariadb.co
 root@rocky8.localdomain                         daniel.lee@mariadb.com
 ruchad1998@gmail.com                            rucha.deodhar@mariadb.com
 sachinsetia1001@gmail.com                       sachin.setiya@mariadb.com
+sanja@sanja-w.fritz.box                         sanja@mariadb.com
 sara.jaakola@gmail.com                          seppo.jaakola@codership.com
 seppo.jaakola@iki.fi                            seppo.jaakola@codership.com
 sergeikrivonos@gmail.com                        sergei.krivonos@mariadb.com
 serzh7214@mail,ru                               serzh7214@mail.ru
 sp1l@users.noreply.github.com                   brnrd@freebsd.org
 stepan@cnt7glr11.localdomain                    stepan.patryshev@mariadb.com
+svojtovich@gmail.com                            svoj@mariadb.org
 sysprg@gmail.com                                julius.goryavsky@mariadb.com
-tmokmss@users.noreply.github.com                tomookam@live.jp
 t.gross35@gmail.com                             tmgross@umich.edu
+tmokmss@users.noreply.github.com                tomookam@live.jp
 ubuntu@ip-172-31-0-18.us-east-2.compute.internal jose.rojas@mariadb.com
 ubuntu@ip-172-31-6-47.us-east-2.compute.internal jose.rojas@mariadb.com
-"varun gupta"                                   varun.gupta@mariadb.com
 vicentiu@localhost.localdomain                  vicentiu@mariadb.org
 vlad_lesin@mail.ru                              vlad.lesin@mariadb.com
-vvaintroub@gmail.com                            wlad@mariadb.com
 vuvova@gmail.com                                serg@mariadb.org
+vvaintroub@gmail.com                            wlad@mariadb.com
 william.devries@gmail.com                       wdevries@clustrix.com
 ycp@precision                                   yuchen.pei@mariadb.com

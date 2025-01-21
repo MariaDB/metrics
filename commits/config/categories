@@ -8,23 +8,23 @@
 "Gruppo Mondadori (Mondadori Group)"    Provider
 "HiQ Finland"             Provider
 "Institut IDiAL"          Provider
-"Jacob Elektronik"        Provider
 "JD.com (Jingdong)"       Provider
+"Jacob Elektronik"        Provider
 "Kali Linux"              Distro
-"MariaDB Plc."     "MariaDB Plc."
 "MariaDB Foundation"      "MariaDB Foundation"
+"MariaDB Plc."     "MariaDB Plc."
 "Monty Program"           "MariaDB Plc."
 "Oracle Corporation"      Provider
 "Red Hat"                 Distro
+"SGS Serious Gaming & Simulations GmbH" Provider
 "SUSE Linux"              Distro
 "Scutech Corporation"     Provider
-"SGS Serious Gaming & Simulations GmbH" Provider
 "Standard Chartered Bank" Provider
 "Stellar Science"         Provider
 "Sun Microsystems"        Provider
 "Trail of Bits"           Other
-"University of Sydney"    Other
 "University College London" Other
+"University of Sydney"    Other
 "Wind River"              Provider
 "Worldline Global"        Provider
 Aerospike                 Provider
@@ -36,10 +36,11 @@ Arm                       Provider
 Atos                      Distro
 Baidu                     Provider
 CHECK24                   Provider
-Chainguard                Provider
 CONNECT                   Provider
+Chainguard                Provider
 ClearCode                 Provider
 ClickHouse                Provider
+CloudLinux                Distro
 Codership                 Provider
 Comcast                   Provider
 Dataworkz                 Provider
@@ -51,30 +52,30 @@ FreeBSD                   Distro
 FromDual                  Provider
 GSoC                      GSoC
 Gentoo                    Distro
-Google                    Provider
 GoSecure                  Provider
+Google                    Provider
 HardenedBSD               Distro
 Homebrew                  Distro
 Huawei                    Provider
 IBM                       Sponsor
+IONOS                     Sponsor
 Independent               Other
 InfoSiftr                 Provider
-IONOS                     Sponsor
 JFrog                     Provider
 Kitware                   Provider
 Kontron                   Provider
 KubeVela                  Provider
 M2Mobi                    Provider
+MSYS2                     Distro
 MonographDB               Provider
 MySQL                     Provider
-MSYS2                     Distro
 NetBSD                    Distro
 Nichi-in                  Provider
+OVHcloud                  Provider
 OmniOS                    Distro
 OpenBSD                   Distro
 Orange                    Provider
 Otto                      Provider
-OVHcloud                  Provider
 Percona                   Sponsor
 PingCAP                   Provider
 Rakuten                   Provider
@@ -95,4 +96,5 @@ VilniusDB                 Provider
 Voxygen                   Provider
 Whatbox                   Provider
 Wodby                     Provider
+Workato                   Provider
 Zulip                     Other
