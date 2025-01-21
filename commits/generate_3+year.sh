@@ -19,3 +19,10 @@ do
         fi
     done
 done
+
+# make sure that all commiters are configured
+if grep -q "Unknown" output/*/organisations-*; then
+  echo_yellow "\nPlease make sure to update config files for:"
+  grep "Unknown" output/*/organisations-*
+  echo_yellow "Once done, re-run this script"
+fi
