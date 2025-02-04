@@ -1,6 +1,6 @@
 The code in this directory makes up the "git data miner," a simple hack
 which attempts to figure things out from the revision history in a git
-repository. 
+repository.
 
 
 INSTALLING GITDM
@@ -27,12 +27,12 @@ Alternatively, you can run with:
 The [details] tell git which changesets are of interest; the [options] can
 be:
 
-	-a	If a patch contains signoff lines from both Andrew Morton 
+	-a	If a patch contains signoff lines from both Andrew Morton
 		and Linus Torvalds, omit Linus's.
 
 	-b dir	Specify the base directory to fetch the configuration files.
 
-	-c file Specify the name of the gitdm configuration file.  
+	-c file Specify the name of the gitdm configuration file.
 	   	By default, "./gitdm.config" is used.
 
 	-d	Omit the developer reports, giving employer information
@@ -58,10 +58,10 @@ be:
 	-p prefix Dump out the database categorized by changeset and by file type.
 		It requires -n, otherwise it is not possible to get separated results.
 
-	-r pat	Only generate statistics for changes to files whose 
+	-r pat	Only generate statistics for changes to files whose
 		name matches the given regular expression.
 
-	-s	Ignore Signed-off-by lines which match the author of 
+	-s	Ignore Signed-off-by lines which match the author of
 		each patch.
 
 	-t	Generate a report by type of contribution (code, documentation, etc.).
@@ -92,7 +92,7 @@ CONFIGURATION FILE
 
 The main purpose of the configuration file is to direct the mapping of
 email addresses onto employers.  Please note that the config file parser is
-exceptionally stupid and unrobust at this point, but it gets the job done.  
+exceptionally stupid and unrobust at this point, but it gets the job done.
 
 Blank lines and lines beginning with "#" are ignored.  Everything else
 specifies a file with some sort of mapping:
@@ -110,7 +110,7 @@ EmailAliases file
 	they had come from canonical@address.
 
     It may happen that some people set their git user data in the
-    following form: "joe.hacker@acme.org <Joe Hacker>". The 
+    following form: "joe.hacker@acme.org <Joe Hacker>". The
     "Joe Hacker" is then considered as the email... but gitdm says
     it is a "Funky" email. An alias line in the following form can
     be used to alias these commits aliased to the correct email
@@ -187,7 +187,7 @@ A few other tools have been added to this repository:
 
   committags
 	I needed to be able to quickly associate a given commit with the
-	major release which contains it.  First attempt used 
+	major release which contains it.  First attempt used
 	"git tags --contains="; after it ran for a solid week, I concluded
 	there must be a better way.  This tool just reads through the repo,
 	remembering tags, and creating a Python dictionary containing the

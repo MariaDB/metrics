@@ -1,6 +1,6 @@
 # Who Touched metrics
 
-This is a tool to generate a list of who has committed in certain areas of code and how many times they have comitted.
+This is a tool to generate a list of who has committed in certain areas of code and how many times they have committed.
 
 ## Configuration
 
@@ -22,13 +22,13 @@ The left aligned name is the name of the area of code, this will be used for the
 
 ### paths
 
-The `paths` option provides a list of paths to search for commits in. Any commits to these pathes count towards the count.
+The `paths` option provides a list of paths to search for commits in. Any commits to these paths count towards the count.
 
 This is the quickest search mode.
 
 ### files_postfix
 
-This option is a list of postfixes to find files accross the codebase with. In the example case this is a full filename, but this would also match `MyCMakeLists.txt`. This is case sensitive and can be used for just file extensions such as `.c`.
+This option is a list of postfixes to find files across the codebase with. In the example case this is a full filename, but this would also match `MyCMakeLists.txt`. This is case sensitive and can be used for just file extensions such as `.c`.
 
 This is slightly slower than `paths` but still quite quick.
 

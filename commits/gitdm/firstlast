@@ -103,7 +103,7 @@ def TrackCounts(v, patch):
     except KeyError:
         DevsPerVersion[v] = set()
         DevsPerVersion[v].add(patch.author)
-        
+
     try:
         empl = patch.author.emailemployer(patch.email, patch.date)
     except AttributeError:

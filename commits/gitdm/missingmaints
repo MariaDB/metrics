@@ -81,9 +81,9 @@ def load_mailmap(file):
             m = mmap_alias.match(line)
             if m:
                 add_alias(m.group(1), m.group(2))
-        
-              
-            
+
+
+
 
 #
 # Manage a list of subsystems.
@@ -197,7 +197,7 @@ def load_subsystem(mf, name):
                 ss.set_status(value)
         line = mf.readline().strip()
     return ss
-                                  
+
 #
 # Get info about a subsystem.
 #
@@ -235,7 +235,7 @@ def lookup_maintainer(subsys, maint, files):
 
 def alias_args(arg, email):
     return [ arg % (alias) for alias in get_aliases(email) ]
-    
+
 
 def decode_date(date):
     return datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -252,7 +252,7 @@ def git_search(files, tests, cdate = False):
         return (commit, decode_date(cdate))
     else:
         return (commit, decode_date(adate))
-    
+
 
 def die(string):
     sys.stderr.write(string + '\n')

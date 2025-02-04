@@ -63,7 +63,7 @@ class GitdmTests(unittest.TestCase):
     # pass to gitdm. We both make sure the file where the result will
     # be put when gitdm is run does not exist beforehand, and we clean
     # up after we are done.
-    # 
+    #
     def runOutputFileRegressionTest(self, expected_output_path, actual_output_path, arguments):
 
         # Make sure we can safely run the test

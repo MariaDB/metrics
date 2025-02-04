@@ -1,0 +1,45 @@
+---
+exclude: "readmes|commits/gitdm"
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: debug-statements
+        name: Check for Python debug statements
+      - id: trailing-whitespace
+        name: Check trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+  # - repo: https://github.com/PyCQA/pylint.git
+  #   rev: v3.3.2
+  #   hooks:
+  #     - id: pylint
+  #       name: Check python (pylint)
+  #       entry: pylint
+  #       language: system
+  #       types: [python]
+  - repo: https://github.com/fauust/pre-commit-shell
+    rev: v1.1
+    hooks:
+      - id: shellcheck
+        name: Check shell script (shellcheck)
+        args: ["-x"]
+      - id: shfmt
+        name: Check shell style (shfmt)
+        args: ["-d", "-i", "2", "-ci"]
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.12.0
+    hooks:
+      - id: markdownlint
+        name: Check for markdown lint (mdl)
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        name: Checks for common misspellings in text files
+        entry: codespell
+        language: python

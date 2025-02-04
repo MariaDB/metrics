@@ -87,7 +87,7 @@ def EndReport():
         HTMLfile.write('</table>\n\n')
     if rSTfile:
         rSTfile.write('   ====================================  =====\n\n')
-        
+
 #
 # Comparison and report generation functions.
 #
@@ -108,7 +108,7 @@ def ReportByPCount(hlist, cscount):
         if count >= ListCount:
             break
     EndReport()
-            
+
 def CompareLChanged(h):
     return h.changed
 
@@ -124,7 +124,7 @@ def ReportByLChanged(hlist, totalchanged):
         if count >= ListCount:
             break
     EndReport()
-            
+
 def CompareLRemoved(h):
     return (h.removed - h.added)
 
@@ -342,7 +342,7 @@ def ReportByESOBs(elist):
         if count >= ListCount:
             break
     EndReport()
-   
+
 def CompareHackers(e):
     return len(e.hackers)
 

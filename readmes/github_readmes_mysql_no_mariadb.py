@@ -1,6 +1,6 @@
 import requests
 import time
-import pandas as pd 
+import pandas as pd
 from datetime import datetime, timedelta
 import os
 import logging
@@ -23,20 +23,20 @@ def search_readmes(query, only_count=ONLY_COUNT):
     }
     params = {
         "q": query,
-        "per_page": 100, 
-        "page": 1 
+        "per_page": 100,
+        "page": 1
     }
     i = 0
     j = 0
     results = []
     while True:
-        try: 
+        try:
             response = requests.get(url, headers=headers, params=params)
             response.raise_for_status()  # Raise an exception for non-2xx responses
             data = response.json()
             i = i+1
             total_count = data["total_count"]
-            if i==1: 
+            if i==1:
                 logging.info("Total Count of Repositories: %d", total_count)
             if only_count:
                 break
@@ -49,11 +49,11 @@ def search_readmes(query, only_count=ONLY_COUNT):
                 params["page"] += 1
                 time.sleep(1)
             else:
-                break 
+                break
         except requests.exceptions.RequestException as e:
             logging.error("Error while making the request: %s", str(e))
             break
-    
+
     if not only_count:
         logging.info("Gathered %d results out of %d.", len(results), total_count)
         # csv output
