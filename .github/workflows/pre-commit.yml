@@ -1,0 +1,20 @@
+---
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install requirements
+        run: |
+          sudo apt-get update && sudo apt-get install -y shfmt
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - uses: pre-commit/action@v3.0.1

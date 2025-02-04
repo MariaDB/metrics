@@ -8,7 +8,7 @@ You can also call `./generate_3+year.sh` which will generate the last 3 years an
 
 ## gitdm_config
 
-GitDM is configured using the files in the `gitdm_config` subdirectory. The key files here help determine which company a given individual email address works for, and alises between addresses. The files are as follows:
+GitDM is configured using the files in the `gitdm_config` subdirectory. The key files here help determine which company a given individual email address works for, and aliases between addresses. The files are as follows:
 
 ### categories
 

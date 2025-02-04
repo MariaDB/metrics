@@ -232,4 +232,4 @@ def ConfigFile(name, confdir):
         else:
             croak('Unrecognized config line: "%s"' % (line))
         line = ReadConfigLine(file)
-        
+

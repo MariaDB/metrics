@@ -82,7 +82,7 @@ def WritePatches(names, patches, file):
                                                                      p.commit,
                                                                      p.desc))
         out.write('</ul>\n\n')
-    out.close()                     
+    out.close()
 
 #
 # Main program.

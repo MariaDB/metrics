@@ -1,0 +1,17 @@
+---
+name: Generate commit logs
+
+on:
+  push:
+  schedule:
+    - cron: "42 10 * * 1"
+
+jobs:
+  generate-commit-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generating commit logs
+        run: |
+          cd commits
+          ./generate_3+year.sh

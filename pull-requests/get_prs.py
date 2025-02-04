@@ -167,7 +167,7 @@ def generate(start_wn, end_wn):
             print(" Found " + str(total_open_count) + "\nGetting total closed count", end='')
         total_close_count = call_github(total_close_url)
         if verbose:
-            print(" Found " + str(total_close_count) + "\nGetting first respose metrics", end='')
+            print(" Found " + str(total_close_count) + "\nGetting first response metrics", end='')
         first_response = call_first_response(first_response_url)
         if verbose:
             print("Found " + str(first_response['with_comments']) + " with comments, " + str(first_response['without_comments']) + " without comments, " + str(first_response['self_merge']) + " self merge no comments, " + str(first_response['uncounted']) + " self closed no comments.")

@@ -37,7 +37,7 @@ def getline(input):
     except UnicodeDecodeError:
         l = l.decode('latin1')
     return l.rstrip()
-    
+
 def SaveLine(line):
     global SavedLine
     SavedLine = line
