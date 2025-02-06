@@ -14,4 +14,4 @@ jobs:
       - uses: actions/checkout@v4
       - name: Generating commit logs
         run: |
-          cd commits && ./generate_3+year.sh
+          cd commits && ./generate.sh -t 1

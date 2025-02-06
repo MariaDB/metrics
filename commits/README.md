@@ -4,7 +4,7 @@ We are using GitDM to process the git tree for MariaDB and generate metrics base
 
 You can execute this by running `./get_git_log.sh <START_DATE> <END_DATE>`. This will generate a text file and two CSV files for the given date range.
 
-You can also call `./generate_3+year.sh` which will generate the last 3 years and this year. It will then put the people CSV files into `people.csv` with an additional column for "Year".
+You can also call `./generate.sh -t 3` which will generate the last 3 years and this year. It will then put the people CSV files into `people.csv` with an additional column for "Year".
 
 ## gitdm_config
 
