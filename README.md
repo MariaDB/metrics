@@ -1,5 +1,7 @@
 # MariaDB Metrics Tools
 
+[![Generate commit logs](https://github.com/MariaDB/metrics/actions/workflows/ci.yml/badge.svg)](https://github.com/MariaDB/metrics/actions/workflows/ci.yml)
+
 This is a repository containing tools used to generate metrics on the MariaDB code and community. This is designed to be easily observed and contributed to by the MariaDB Community.
 
 ## pre-commit
