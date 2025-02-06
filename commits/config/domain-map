@@ -5,10 +5,10 @@ alibaba-inc.com     Alibaba
 alpinelinux.org     Alpine Linux
 amazon.com          Amazon
 appian.com          Appian
-askmonty.org        Monty Program < 2013-04-23
-askmonty.org        MariaDB Plc.
 arm.com             Arm
 artixlinux.org      Artix Linux
+askmonty.org        MariaDB Plc.
+askmonty.org        Monty Program < 2013-04-23
 atos.net            Atos
 bestpractical.com   Best Practical
 check24.de          CHECK24
@@ -19,7 +19,11 @@ debian.org          Debian
 exherbo.org         Exherbo
 freebsd.org         FreeBSD
 fruct.org           FRUCT
+galeracluster.com   Codership
+gentoo.org          Gentoo
 genusplc.com        Genus
+google.com          Google
+hasprime.com        Hasprime
 huawei.com          Huawei
 ibm.com             IBM
 infosiftr.com       InfoSiftr
@@ -29,17 +33,14 @@ jd.com              JD.com (Jingdong)
 kali.org            Kali Linux
 kitware.com         Kitware
 kontron.com         Kontron
-galeracluster.com   Codership
-gentoo.org          Gentoo
-google.com          Google
 m2mobi.com          M2Mobi
 mariadb.com         MariaDB Plc.
 mariadb.org         MariaDB Foundation
-montyprogram.com    Monty Program < 2013-04-23
 montyprogram.com    MariaDB Plc.
+montyprogram.com    Monty Program < 2013-04-23
 mysql.com           MySQL < 2008-01-16
-mysql.com           Sun Microsystems < 2010-01-27
 mysql.com           Oracle Corporation
+mysql.com           Sun Microsystems < 2010-01-27
 netbsd.org          NetBSD
 nichi.com           Nichi-in
 omnios.org          OmniOS
@@ -51,21 +52,21 @@ percona.com         Percona
 rakuten-sec.co.jp   Rakuten
 redhat.com          Red Hat
 scaleflux.com       ScaleFlux
+seravo.com          Seravo
 service-now.com     ServiceNow
 servicenow.com      ServiceNow
-seravo.com          Seravo
-skysql.com          SkySQL < 2013-04-23
 skysql.com          MariaDB Plc.
+skysql.com          SkySQL < 2013-04-23
 stellarscience.com  Stellar Science
-sun.com             Sun Microsystems < 2010-01-27
 sun.com             Oracle Corporation
+sun.com             Sun Microsystems < 2010-01-27
 suse.cz             SUSE Linux
 suse.de             SUSE Linux
 tempesta-tech.com   Tempesta
 tencent.com         Tencent
 tiledb.io           TileDB
-tokutek.com         Tokutek < 2015-04-14
 tokutek.com         Percona
+tokutek.com         Tokutek < 2015-04-14
 uniontech.com       Uniontech
 vettabase.com       Vettabase
 voxygen.co.uk       Voxygen
