@@ -14,12 +14,12 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Generating commit logs
-        run: |
-          cd commits && ./generate.sh -t 0
-          LOGS_DIR="output-$(date +%Y)-$(date +%W)"
-          mv output $LOGS_DIR
-          tar -czf mariadb-stats.tgz $LOGS_DIR
+      # - name: Generating commit logs
+      #   run: |
+      #     cd commits && ./generate.sh -t 0
+      #     LOGS_DIR="output-$(date +%Y)-$(date +%W)"
+      #     mv output $LOGS_DIR
+      #     tar -czf mariadb-stats.tgz $LOGS_DIR
       - name: Generating pull requests stats
         run: |
           # calculate week-numbers
@@ -27,9 +27,9 @@ jobs:
           YEAR=$(date +%Y)
           TILL="${YEAR}-W${WEEK_NUMBER}"
           FROM="${YEAR}-W1"
-          ./get_prs.py -v "$FROM" "$TILL"
+          cd pull-requests && ./get_prs.py -v "$FROM" "$TILL"
           mv prs*.csv prs.csv
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "mariadb-stats.tgz,pull-requests/prs.csv"
+          artifacts: "output/mariadb-stats.tgz,pull-requests/prs.csv"
           bodyFile: "commits/ci_release.md"
