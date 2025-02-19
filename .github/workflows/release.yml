@@ -1,0 +1,40 @@
+---
+name: Releases
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  releases:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generating commit logs
+        run: |
+          cd commits && ./generate.sh -t 0
+          LOGS_DIR="output-$(date +%Y)-$(date +%W)"
+          mv output $LOGS_DIR
+          tar -czf maria-stats.tgz $LOGS_DIR
+      - name: Generating pull requests stats
+        run: |
+          # calculate week-numbers
+          WEEK_NUMBER=$(date +%W)
+          YEAR=$(date +%Y)
+          TILL="${YEAR}-W${WEEK_NUMBER}"
+          FROM="${YEAR}-W1"
+          cd pull-requests && ./get_prs.py -v "$FROM" "$TILL"
+          mv prs*.csv prs.csv
+      - name: Generating release body (TODO maybe overly complex)
+        run: |
+          sed -i "s/_TAG_/${GH_TAG}/g" .release_template.md
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "commits/maria-stats.tgz,pull-requests/prs.csv"
+          bodyFile: ".release_template.md"

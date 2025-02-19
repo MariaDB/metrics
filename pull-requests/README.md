@@ -4,7 +4,7 @@
 
 This tool gets the PR counts for 2022 and stores them in `prs-<START>..<END>.csv`. There is rate-limit handling built in because some calls are only allowed to do 30 requests per minute. It will also pause and retry upon 500 server errors.
 
-To execute this you will need a GitHub token from <https://github.com/settings/tokens/new> and set this as the environment variable `GITHUB_TOKEN`. You need to provide a date range using week numbers. For example, to generate a 2022 report:
+To execute this you will need a GitHub token from <https://github.com/settings/tokens/new> and set this as the environment variable `GH_TOKEN`. You need to provide a date range using week numbers. For example, to generate a 2022 report:
 
 ```
 ./get_prs.py 2022-W1 2022-W52
@@ -22,7 +22,7 @@ This generates a list of pull requests that require attention. Options are:
 * `-s` - sort order, `longest` sorts the final output by the longest time since the last response, `shortest` sorts by the shortest time since the last response. By default it will be unsorted, so ordered by the report type option.
 * `-v` - verbose, add verbose output to the console.
 
-As with `get_prs.py`, you will require the `GITHUB_TOKEN` environment variable.
+As with `get_prs.py`, you will require the `GH_TOKEN` environment variable.
 
 ## plot_prs.py
 

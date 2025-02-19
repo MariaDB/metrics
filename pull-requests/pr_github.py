@@ -5,9 +5,9 @@ import requests
 import json
 import re
 
-GITHUB_TOKEN = os.environ['GITHUB_TOKEN']
+GH_TOKEN = os.environ['GH_TOKEN']
 
-auth_header = {'Authorization': 'token ' + GITHUB_TOKEN}
+auth_header = {'Authorization': 'token ' + GH_TOKEN}
 
 
 def get_data(url, verbose):
