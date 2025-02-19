@@ -3,6 +3,7 @@ name: Releases
 
 on:
   push:
+  pull_request:
     # tags:
     #   - "*"
 
