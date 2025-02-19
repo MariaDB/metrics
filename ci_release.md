@@ -1,0 +1,20 @@
+# A metrics snapshot up to TODO var
+
+The output files include:
+
+```
+people-*.csv - breakdown of commits by individual
+organisations-*.csv - breakdown of commits by organisations
+categories-*.csv - breakdown of commits by category
+prs.csv - breakdown of pull request statistics
+```
+
+The `maria-stats.tgz` file contains the commit results for the following repositories:
+
+- <https://github.com/mariadb-corporation/libmarias3>
+- <https://github.com/mariadb-corporation/mariadb-columnstore-engine>
+- <https://github.com/mariadb-corporation/mariadb-connector-c>
+- <https://github.com/mariadb/mariadb-docker>
+- <https://github.com/mariadb/mariadb_kernel>
+
+The `prs.csv` file is just for the MariaDB Server tree.
